@@ -38,7 +38,7 @@ public class MainFormController {
         for(int i = 0; i < 30; i++  ) {
             //VBox vBox = getBlock();
             PersonDescriptor personDescriptor = new PersonDescriptor();
-            gridPane.add(personDescriptor,0,i+1);
+            gridPane.add(personDescriptor,0,i);
         }
         scrollPaneResult.setContent(gridPane);
         return scrollPaneResult;

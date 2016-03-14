@@ -15,7 +15,7 @@
     </stylesheets>
     <top>
         <MenuBar>
-            <Menu text="Мимими">
+            <Menu text="Меню">
             </Menu>
         </MenuBar>
     </top>
@@ -24,7 +24,7 @@
         <GridPane hgap="15" vgap="15">
             <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
             <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
-                <Image url="test3.jpeg"/>
+                <Image url="test4.jpg"/>
             </ImageView>
             <GridPane hgap="15" vgap="15" GridPane.rowIndex="1" GridPane.columnIndex="0">
                 <padding><Insets right="25" bottom="25" left="25"/></padding>
@@ -53,8 +53,11 @@
 
     <right>
         <HBox>
-            <ScrollPane fx:id="scrollPaneResult" minWidth="300">
+            <ScrollPane fx:id="scrollPaneResult" minWidth="500">
                 <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                <stylesheets>
+                    <URL value="@fxml.css" />
+                </stylesheets>
             </ScrollPane>
         </HBox>
     </right>
