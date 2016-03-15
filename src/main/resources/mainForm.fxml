@@ -16,6 +16,9 @@
     <top>
         <MenuBar>
             <Menu text="Меню">
+                <MenuItem text="Новый поиск"/>
+                <MenuItem text="Настройки"/>
+                <MenuItem text="Выход"/>
             </Menu>
         </MenuBar>
     </top>
