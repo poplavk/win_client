@@ -28,7 +28,7 @@ GridPane {
 }
 ScrollPane {
     -fx-fit-to-width: "true";
-    -fx-border-color: #2e8b57;
+    /*-fx-border-color: #2e8b57;*/
     -fx-border-width: 2px;
 }
 .button {
@@ -42,4 +42,10 @@ ScrollPane {
     linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%);
     -fx-background-insets: 0;
     -fx-background-radius: 9;
+}
+.slider {
+    -fx-show-tick-labels: true;
+    -fx-show-tick-marks: true;
+    -fx-major-tick-unit: 25;
+    -fx-minor-tick-count: 5;
 }

@@ -17,7 +17,7 @@ public class TestApplication extends Application {
 
         Scene scene = new Scene(root, 1300, 790);
 
-        stage.setTitle("Welcome");
+        stage.setTitle("Pry 1.0");
 
         stage.setScene(scene);
         stage.show();

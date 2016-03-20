@@ -1,49 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
 <BorderPane fx:id="borderPane" fx:controller="gui.MainFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
-        <URL value="@fxml.css" />
+        <URL value="@fxml.css"/>
     </stylesheets>
     <top>
         <MenuBar>
             <Menu text="Меню">
-                <MenuItem text="Новый поиск"/>
-                <MenuItem text="Настройки"/>
-                <MenuItem text="Выход"/>
+                <MenuItem fx:id="menuItemNewFind" onAction="#handleMenuItemNewFind" text="Новый поиск"/>
+                <MenuItem fx:id="menuItemSettings" onAction="#handleMenuItemSettings" text="Настройки"/>
+                <MenuItem fx:id="menuItemExit" onAction="#handleMenuItemExit" text="Выход"/>
             </Menu>
         </MenuBar>
     </top>
 
     <left>
         <GridPane hgap="15" vgap="15">
-            <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
             <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
                 <Image url="test4.jpg"/>
             </ImageView>
-            <GridPane hgap="15" vgap="15" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                <padding><Insets right="25" bottom="25" left="25"/></padding>
+            <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <padding>
+                    <Insets right="25" bottom="25" left="25"/>
+                </padding>
                 <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
-                    <Label text="Количество результатов:"/>
-                    <RadioButton text="Один"/>
-                    <RadioButton text="Все"/>
+                    <Label text="Настроить:"/>
+                    <fx:define>
+                        <ToggleGroup fx:id="toggleGroupSettings"/>
+                    </fx:define>
+                    <children>
+                        <RadioButton text="Количество результатов" toggleGroup="$toggleGroupSettings"/>
+                        <RadioButton text="Качество результатов" toggleGroup="$toggleGroupSettings"/>
+                    </children>
                 </VBox>
-                <VBox GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <!--><VBox GridPane.rowIndex="2" GridPane.columnIndex="1">
                     <Label text="Поиск:"/>
                     <CheckBox text="Вконтакте"/>
                     <CheckBox text="Facebook"/>
-                </VBox>
-                <VBox GridPane.rowIndex="2" GridPane.columnIndex="2">
-                    <Label text="Процент точности:"/>
-                    <Slider min="0" max="100" blockIncrement="10" value="80" showTickLabels="true" showTickMarks="true" majorTickUnit="50" minorTickCount="5"/>
+                </VBox><-->
+                <VBox fx:id="vBoxSlider" GridPane.rowIndex="2" GridPane.columnIndex="2">
+                    <!--> <Label text="Процент точности:"/>
+                     <Slider min="0" max="100" blockIncrement="10" value="80" showTickLabels="true" showTickMarks="true" majorTickUnit="50" minorTickCount="5"/>
+                     <-->
                 </VBox>
             </GridPane>
             <BorderPane GridPane.rowIndex="2" GridPane.columnIndex="0">
@@ -57,9 +64,11 @@
     <right>
         <HBox>
             <ScrollPane fx:id="scrollPaneResult" minWidth="500">
-                <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                <padding>
+                    <Insets top="25" right="25" bottom="25" left="25"/>
+                </padding>
                 <stylesheets>
-                    <URL value="@fxml.css" />
+                    <URL value="@fxml.css"/>
                 </stylesheets>
             </ScrollPane>
         </HBox>

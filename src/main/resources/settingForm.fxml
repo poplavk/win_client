@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:controller="gui.SettingsFormController" xmlns:fx="http://javafx.com/fxml">
+    <stylesheets>
+        <URL value="@fxml.css"/>
+    </stylesheets>
+    <Label text="Тип шифрования" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <ChoiceBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <items>
+        </items>
+    </ChoiceBox>
+    <Label text="Социальные сети" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <CheckBox text="Вконтакте" fx:id="checkBoxVK" GridPane.columnIndex="0" GridPane.rowIndex="2" selected="true"/>
+        <CheckBox text="Facebook"  fx:id="checkBoxFB" GridPane.columnIndex="1" GridPane.rowIndex="2" selected="true"/>
+    <Label text="Информация" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <CheckBox text="Фотография" fx:id="checkBoxPhoto" GridPane.columnIndex="0" GridPane.rowIndex="4"
+                  selected="true" />
+        <CheckBox text="Имя" fx:id="checkBoxName" GridPane.columnIndex="0" GridPane.rowIndex="5" selected="true"/>
+        <CheckBox text="Дата рождения" fx:id="checkBoxBirthday" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <CheckBox text="Город" fx:id="checkBoxCity" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <CheckBox text="Место работы" fx:id="checkBoxJob" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <CheckBox text="Телефон" fx:id="checkBoxPhone" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+ </GridPane>
