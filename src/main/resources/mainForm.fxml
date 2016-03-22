@@ -38,20 +38,19 @@
                         <ToggleGroup fx:id="toggleGroupSettings"/>
                     </fx:define>
                     <children>
-                        <RadioButton text="Количество результатов" toggleGroup="$toggleGroupSettings"/>
-                        <RadioButton text="Качество результатов" toggleGroup="$toggleGroupSettings"/>
+                        <RadioButton fx:id="radioButtonCount" text="Количество результатов" toggleGroup="$toggleGroupSettings"
+                                     selected="true" onAction="#handleRadioButtonCount"/>
+                        <RadioButton fx:id="radioButtonQuality" text="Качество результатов" toggleGroup="$toggleGroupSettings"
+                                        selected="false" onAction="#handleRadioButtonQuality"/>
                     </children>
                 </VBox>
                 <!--><VBox GridPane.rowIndex="2" GridPane.columnIndex="1">
                     <Label text="Поиск:"/>
                     <CheckBox text="Вконтакте"/>
                     <CheckBox text="Facebook"/>
-                </VBox><-->
-                <VBox fx:id="vBoxSlider" GridPane.rowIndex="2" GridPane.columnIndex="2">
-                    <!--> <Label text="Процент точности:"/>
-                     <Slider min="0" max="100" blockIncrement="10" value="80" showTickLabels="true" showTickMarks="true" majorTickUnit="50" minorTickCount="5"/>
-                     <-->
                 </VBox>
+                <VBox fx:id="vBoxSlider" GridPane.rowIndex="2" GridPane.columnIndex="2">
+                </VBox><-->
             </GridPane>
             <BorderPane GridPane.rowIndex="2" GridPane.columnIndex="0">
                 <center>

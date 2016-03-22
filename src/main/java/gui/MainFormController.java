@@ -21,34 +21,47 @@ public class MainFormController {
     private GridPane gridPane = new GridPane();
     @FXML
     private BorderPane borderPane;
-    @FXML
-    private VBox vBoxSlider;
+    private VBox vBoxSlider = new VBox();
     private Label labelSlider = new Label();
+    Slider slider = new Slider();
     public void initialize() {
-        getvBoxSlider();
+        getGridPaneShortSettings();
         getScrollPaneResult();
     }
     public GridPane getGridPaneShortSettings() {
-        gridPaneShortSettings.getChildren().addAll(getvBoxSlider());
+        gridPaneShortSettings.add(getvBoxSlider(),2,2);
         return gridPaneShortSettings;
     }
     public VBox getvBoxSlider() {
         Label label = new Label("Slider:");
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(100);
-        slider.setValue(80);
+        HBox hBox = new HBox();
+        slider.setMin(1);
+        slider.setMax(50);
+        slider.setValue(50);
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,Number old_val, Number new_val) {
                 labelSlider.setText(String.format("%.0f", new_val));
             }
         });
-        vBoxSlider.getChildren().addAll(label,slider, labelSlider);
+        hBox.getChildren().addAll(slider,labelSlider);
+        vBoxSlider.getChildren().addAll(label,hBox);
         return vBoxSlider;
     }
+
+    public void updateVBoxSliderQuality () {
+        slider.setMin(30);
+        slider.setMax(100);
+        slider.setValue(80);
+    }
+
+    public void updateVBoxSliderCount () {
+        slider.setMin(1);
+        slider.setMax(50);
+        slider.setValue(50);
+    }
+
     public ScrollPane getScrollPaneResult() {
         for(int i = 0; i < 30; i++  ) {
-            //VBox vBox = getBlock();
             PersonDescriptor personDescriptor = new PersonDescriptor();
             gridPane.add(personDescriptor,0,i);
         }
@@ -76,5 +89,13 @@ public class MainFormController {
     }
 
     public void handleMenuItemExit(ActionEvent actionEvent) {
+    }
+
+    public void handleRadioButtonCount(ActionEvent actionEvent) {
+        updateVBoxSliderCount();
+    }
+
+    public void handleRadioButtonQuality(ActionEvent actionEvent) {
+        updateVBoxSliderQuality();
     }
 }
