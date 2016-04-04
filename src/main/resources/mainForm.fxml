@@ -54,7 +54,7 @@
             </GridPane>
             <BorderPane GridPane.rowIndex="2" GridPane.columnIndex="0">
                 <center>
-                    <Button text="Получить результат"/>
+                    <Button text="Найти"/>
                 </center>
             </BorderPane>
         </GridPane>
@@ -62,7 +62,7 @@
 
     <right>
         <HBox>
-            <ScrollPane fx:id="scrollPaneResult" minWidth="500">
+            <ScrollPane fx:id="scrollPaneSubscription" minWidth="500">
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>

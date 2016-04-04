@@ -10,7 +10,7 @@
         <URL value="@fxml.css"/>
     </stylesheets>
     <Label text="Тип шифрования" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-    <ChoiceBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+    <ChoiceBox fx:id="choiceBoxEncryptType" GridPane.columnIndex="1" GridPane.rowIndex="0">
         <items>
         </items>
     </ChoiceBox>

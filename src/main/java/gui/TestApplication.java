@@ -15,7 +15,7 @@ public class TestApplication extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("mainForm.fxml"));
 
-        Scene scene = new Scene(root, 1300, 790);
+        Scene scene = new Scene(root, 800, 790);
 
         stage.setTitle("Pry 1.0");
 
