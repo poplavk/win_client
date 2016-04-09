@@ -1,3 +1,5 @@
+package hackIntoSN;
+
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
@@ -7,10 +9,6 @@ import facebook4j.Facebook;
 import facebook4j.api.UserMethods;
 import facebook4j.auth.AccessToken;
 
-
-/**
- * Created by Suharev on 20.03.2016.
- */
 
 public class GetSomePrivateData {
 
