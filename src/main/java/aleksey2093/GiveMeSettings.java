@@ -115,7 +115,7 @@ public class GiveMeSettings {
         }
         return res;
     }
-    public void  setSaveSettingWindow(boolean[] tmp)
+    public void  setSaveSettingWindow(boolean[] tmp, String encr)
     {
         Properties properties = loadSettingFile();
         if (tmp[0])
@@ -134,6 +134,9 @@ public class GiveMeSettings {
                 properties.setProperty("socialnetwork","0");
             }
         }
+        if (encr == "AES") { properties.setProperty("encryption","1"); }
+        else if (encr == "RSA") { properties.setProperty("encryption","2"); }
+        else if (encr == "ГОСТ") { properties.setProperty("encryption","3"); }
         properties.setProperty("social.photo",(tmp[2]?"1":"0"));
         properties.setProperty("social.fio",(tmp[3]?"1":"0"));
         properties.setProperty("social.datebith",(tmp[4]?"1":"0"));
