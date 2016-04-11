@@ -25,4 +25,7 @@
         <CheckBox text="Город" fx:id="checkBoxCity" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
         <CheckBox text="Место работы" fx:id="checkBoxJob" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
         <CheckBox text="Телефон" fx:id="checkBoxPhone" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
- </GridPane>
+    <Button text="Сохранить" fx:id="buttonSaveSettings" GridPane.columnIndex="0" GridPane.rowIndex="9" onAction="#handleSaveSettings"/>
+    <Button text="Отмена" fx:id="buttonCancelSettings" GridPane.columnIndex="1" GridPane.rowIndex="9" onAction="#handleCancelSettings"/>
+
+</GridPane>

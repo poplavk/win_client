@@ -1,5 +1,6 @@
 package gui;
 
+import aleksey2093.FriendSendResult;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainFormController {
     @FXML
@@ -65,18 +67,18 @@ public class MainFormController {
     }
 
     public ScrollPane getScrollPaneResult() {
-        /*for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 30; i++) {
             SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor("Подписка  " + i);
             gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
-        }*/
-        FriendSendResult friendSendResult = new FriendSendResult();
+        }
+      /*  FriendSendResult friendSendResult = new FriendSendResult();
         friendSendResult.give_me_please_friends();
         ArrayList<String> list = friendSendResult.getListFriends();
 
         for (int i = 0; i < list.toArray().length; i++) {
             SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));//("Подписка  " + i);
             gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
-        }
+        }*/
         scrollPaneSubscription.setContent(gridPane);
         return scrollPaneSubscription;
     }

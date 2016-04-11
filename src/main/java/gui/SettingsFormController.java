@@ -32,7 +32,7 @@ public class SettingsFormController extends SettingsDescriptor {
     @FXML
     Button buttonSaveSettings;
     @FXML
-    Button buttonCancel;
+    Button buttonCancelSettings;
 
     SettingsDescriptor settingsDescriptor = new SettingsDescriptor();
 
