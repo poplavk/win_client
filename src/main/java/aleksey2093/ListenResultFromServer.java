@@ -14,7 +14,7 @@ public class ListenResultFromServer {
     /*
     Класс постоянно прослушивает сообщения с сервера, чтобы поймать сообщение о входящем рузльтате подписчика.
      */
-    public Thread thread;
+    public static Thread thread;
 
     public void startListen() {
         thread = new Thread(new Runnable() {
@@ -35,10 +35,11 @@ public class ListenResultFromServer {
         thread.start();
         thread.isInterrupted();
     }
+    
+    public static ServerSocket serversock = null;
 
     public void listen()
     {
-        ServerSocket serversock;
         GiveMeSettings giveMeSettings = new GiveMeSettings();
         try {
             int err = 0;
@@ -76,27 +77,30 @@ public class ListenResultFromServer {
                 if (msgbyte[1] != 4) { System.out.println("Получили левое сообщение. Продолжаем прослушку."); continue; }
                 if (msgbyte[2] < 1) { System.out.println("Сообщение неверно дешефровано или отправлено. " +
                         "Длинна логина указана как отрицательная. Продолжаем прослушку."); continue; }
-                String login = new String(msgbyte , 4, msgbyte[3], "UTF-8");
+                String login = new String(msgbyte , 3, msgbyte[2], "UTF-8");
 
                 System.out.println("Хотите посмотреть на результат пользователя - " + login + "? (yes/no)");
-                while (true) {
-                    Scanner scan = new Scanner(System.in);
-                    String qes = scan.nextLine();
-                    if (qes == "yes") { break; } else if (qes == "no") { continue resiv; }
-                    else { System.out.println("Неправельный ввод. Повторите ввод."); }
-                }
+                int qeees = JOptionPane.showConfirmDialog(null, "Хотите посмотреть на результат пользователя - "
+                        + login + "? (yes/no)", "Сообщение от " + login, JOptionPane.YES_NO_OPTION);
+                if (qeees != JOptionPane.YES_OPTION)
+                    break resiv;
                 //Мы получили от пользователя разрешение посмотреть на результат запрос от пользователя
-                int jb = 4 + msgbyte[3];
-                //logw    len = 3       0 + 3   встаем на
-                //и так мы получили список ссылок разделенных проблем.
-                // Начинаем его обрабатывать и потом передать в систему выдачи
-                //узнаем количество ссылок
-                if (jb >= len) { System.out.println("Результат пользователя оказался пустым"); continue; }
+                int jb = 3 + msgbyte[2];
+                /*и так мы получили список ссылок разделенных проблем.
+                * Начинаем его обрабатывать и потом передать в систему выдачи */
+                if (jb >= len) {
+                    System.out.println("Результат пользователя оказался пустым");
+                    JOptionPane.showMessageDialog(null,"Результат пользователя пуст", "Пусто", JOptionPane.INFORMATION_MESSAGE);
+                    continue;
+                }
                 ArrayList<String> links = new ArrayList<String>();
                 while (jb < len)
                 {
-                    int size = ByteBuffer.wrap(msgbyte,jb,4).getInt(); jb+=4;
-                    String link = new String(msgbyte, jb, size, "UTF-8"); jb+=size;
+                    int size = ByteBuffer.wrap(msgbyte,jb,4).getInt(); 
+                    jb+=4;
+                    String link = new String(msgbyte, jb, size, "UTF-8"); 
+                    links.add(link);
+                    jb+=size;
                 }
                 //Вызов метода подсистемы подзгрузки из соц сетей, пока его нет просто печатаем
                 for (int i=0;i<links.toArray().length;i++)
