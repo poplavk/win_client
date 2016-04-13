@@ -23,17 +23,13 @@ public class FriendSendResult {
         boolean ok = false;
         byte err = 0;
         Socket sock;
-        //PrintWriter out = null;
-        //BufferedReader in = null;
-        DataOutputStream outputStream; //= null;
-        DataInputStream inputStream; //= null;
+        DataOutputStream outputStream;
+        DataInputStream inputStream;
         while (true) {
             try {
                 if ((sock = giveMeSettings.getSocket(false)) == null) {
                     return -1;
                 }
-                //out = new PrintWriter(sock.getOutputStream(), true);
-                //in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 outputStream = new DataOutputStream(sock.getOutputStream());
                 inputStream = new DataInputStream(sock.getInputStream());
                 break;
@@ -106,26 +102,24 @@ public class FriendSendResult {
                     }
                 }
                 //тут будет вызов функции дешифруем все, что после нулевого байта
-                if (len <= 4) {
+                if (len <= 2) {
                     System.out.println("Подписчкиво нет");
                     return 2;
                 }
-                //int[] listkeys = new int[countlogin];
-                //String[] listfriends = new String[countlogin];
-                j = 2; //int i = 0;
-                while (j<len){ /*for (int i = 0; i < message_byte.length; i++) {*/
-                    int lenloginnow = java.nio.ByteBuffer.wrap(message_byte,j,4).getInt();
+                j = 2;
+                while (j<len){
+                    /* ключ пока нигде не используется, поэтому просто будем собирать, но не хранить
+                    * как вариант можно выводить его в списке подписок и по клику отправлять его
+                    * на сервер, а не строковый логин */
+                    int key = java.nio.ByteBuffer.wrap(message_byte,j,4).getInt();
                     j+=4;
-                    //listkeys[i] = java.nio.ByteBuffer.wrap(tmp_bit).getInt();
+                    int lenloginnow = message_byte[j]; j++;
                     String tess = new String(message_byte, j, lenloginnow, "UTF-8");
                     listfrends.add(tess); j+=lenloginnow;
                 }
                 System.out.println("Список подписок");
-                //String[] listlogin = new String[listfrends.toArray().length];
                 for (int i = 0; i < listfrends.toArray().length; i++) {
                     System.out.println((i + 1) + "  key: " + i + " login: " + listfrends.get(i));
-                    //listlogin[i] = listfrends.get(i);
-                    //listfriends[i]=listfriends[i]+" "+listkeys[i];
                 }
                 //getScrollPaneResult(listlogin);
                 return 1;
