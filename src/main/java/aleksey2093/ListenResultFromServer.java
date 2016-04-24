@@ -117,12 +117,14 @@ public class ListenResultFromServer {
                     int size = ByteBuffer.wrap(msgbyte, jb, 4).getInt();
                     jb += 4;
                     String link = new String(msgbyte, jb, size, "UTF-8");
-                    links.add(link);
+                    link = getIdFromLink(link);
+                    if (link != null) 
+                        links.add(link);
                     jb += size;
                 }
                 //Вызов метода подсистемы подзгрузки из соц сетей, пока его нет просто печатаем
                 for (int i = 0; i < links.toArray().length; i++) {
-                    //vkGet(links[i], givesocialstg());
+                    vkGet(links[i], givesocialstg());
                     System.out.println("Ссылка по запросу пользователя (" + login + "): " + links.get(i));
                 }
             }
@@ -131,5 +133,17 @@ public class ListenResultFromServer {
         {
             System.out.println("Возникла ошибка при прослушивании данных");
         }
+        //конец метода прослушки
+    }
+    private String getIdFromLink(String link)
+    {
+        String tmp = null;
+        if (link.toCharArray()[link.length()-1] == '/')
+            link = link.substring(0,link.length()-2);
+        for (int i = link.length()-1; i >=0 ; i--)
+        {
+            tmp = link.toCharArray()[i] + tmp;
+        }
+        return tmp;
     }
 }
