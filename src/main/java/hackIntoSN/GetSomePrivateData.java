@@ -1,4 +1,4 @@
-package ru.mephi.oauthtest;
+package hackIntoSN;
 
 import java.net.*;
 import java.io.*;
