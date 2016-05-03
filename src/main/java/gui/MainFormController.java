@@ -27,6 +27,8 @@ public class MainFormController {
     private VBox vBoxSlider = new VBox();
     private Label labelSlider = new Label();
     Slider slider = new Slider();
+    @FXML
+    MenuBar menuBarMain;
 
     public void initialize() {
         getGridPaneShortSettings();
@@ -127,6 +129,8 @@ public class MainFormController {
     }
 
     public void handleMenuItemExit(ActionEvent actionEvent) {
+        Stage stage = (Stage) menuBarMain.getScene().getWindow();
+        stage.close();
     }
 
     public void handleRadioButtonCount(ActionEvent actionEvent) {

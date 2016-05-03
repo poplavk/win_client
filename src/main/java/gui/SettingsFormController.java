@@ -9,14 +9,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
+import javafx.stage.Stage;
 
 public class SettingsFormController extends SettingsDescriptor {
     @FXML
     ChoiceBox choiceBoxEncryptType;
+//    @FXML
+//    CheckBox checkBoxVK;
+//    @FXML
+//    CheckBox checkBoxFB;
     @FXML
-    CheckBox checkBoxVK;
+    RadioButton radioButtonVK;
     @FXML
-    CheckBox checkBoxFB;
+    RadioButton radioButtonFB;
     @FXML
     CheckBox checkBoxPhoto;
     @FXML
@@ -60,21 +66,27 @@ public class SettingsFormController extends SettingsDescriptor {
 
     public void getAllSettings() {
         switch (settingsDescriptor.getSocialNetwork()) {
+//            case 0:
+//                checkBoxVK.setSelected(false);
+//                checkBoxFB.setSelected(false);
+//                break;
+//            case 1:
+//                checkBoxVK.setSelected(true);
+//                checkBoxFB.setSelected(false);
+//                break;
+//            case 2:
+//                checkBoxVK.setSelected(false);
+//                checkBoxFB.setSelected(true);
+//                break;
+//            case 3:
+//                checkBoxVK.setSelected(true);
+//                checkBoxFB.setSelected(true);
+//                break;
             case 0:
-                checkBoxVK.setSelected(false);
-                checkBoxFB.setSelected(false);
+                radioButtonVK.setSelected(true);
                 break;
             case 1:
-                checkBoxVK.setSelected(true);
-                checkBoxFB.setSelected(false);
-                break;
-            case 2:
-                checkBoxVK.setSelected(false);
-                checkBoxFB.setSelected(true);
-                break;
-            case 3:
-                checkBoxVK.setSelected(true);
-                checkBoxFB.setSelected(true);
+                radioButtonFB.setSelected(true);
                 break;
         }
         checkBoxPhoto.setSelected(settingsDescriptor.getPhoto());
@@ -87,14 +99,18 @@ public class SettingsFormController extends SettingsDescriptor {
 
     public void handleCancelSettings(ActionEvent actionEvent) {
         getAllSettings();
+        Stage stage = (Stage) buttonCancelSettings.getScene().getWindow();
+        stage.close();
     }
 
     public void handleSaveSettings(ActionEvent actionEvent) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
                 new GiveMeSettings().setSaveSettingWindow(new boolean[]{
-                        checkBoxVK.isSelected(),
-                        checkBoxFB.isSelected(),
+//                        checkBoxVK.isSelected(),
+//                        checkBoxFB.isSelected(),
+                        radioButtonVK.isSelected(),
+                        radioButtonFB.isSelected(),
                         checkBoxPhoto.isSelected(),
                         checkBoxName.isSelected(),
                         checkBoxBirthday.isSelected(),
@@ -107,5 +123,7 @@ public class SettingsFormController extends SettingsDescriptor {
         });
         thread.setName("Сохранение настроек");
         thread.start();
+        Stage stage = (Stage) buttonCancelSettings.getScene().getWindow();
+        stage.close();
     }
 }

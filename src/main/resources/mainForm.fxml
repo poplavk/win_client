@@ -11,7 +11,7 @@
         <URL value="@fxml.css"/>
     </stylesheets>
     <top>
-        <MenuBar>
+        <MenuBar fx:id="menuBarMain">
             <Menu text="Меню">
                 <MenuItem fx:id="menuItemNewFind" onAction="#handleMenuItemNewFind" text="Новый поиск"/>
                 <MenuItem fx:id="menuItemSettings" onAction="#handleMenuItemSettings" text="Настройки"/>

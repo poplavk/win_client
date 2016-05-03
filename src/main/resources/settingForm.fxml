@@ -15,8 +15,20 @@
         </items>
     </ChoiceBox>
     <Label text="Социальные сети" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <fx:define>
+            <ToggleGroup fx:id="toggleGroupSocial"/>
+        </fx:define>
+        <children>
+            <RadioButton fx:id="radioButtonVK" text="Вконтакте" toggleGroup="$toggleGroupSocial"
+                         GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <RadioButton fx:id="radioButtonFB" text="Facebook" toggleGroup="$toggleGroupSocial"
+                         GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        </children>
+
+        <!--
         <CheckBox text="Вконтакте" fx:id="checkBoxVK" GridPane.columnIndex="0" GridPane.rowIndex="2" selected="true"/>
         <CheckBox text="Facebook"  fx:id="checkBoxFB" GridPane.columnIndex="1" GridPane.rowIndex="2" selected="true"/>
+        -->
     <Label text="Информация" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <CheckBox text="Фотография" fx:id="checkBoxPhoto" GridPane.columnIndex="0" GridPane.rowIndex="4"
                   selected="true" />
