@@ -5,6 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <GridPane fx:controller="gui.SettingsFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@fxml.css"/>
@@ -19,9 +22,9 @@
             <ToggleGroup fx:id="toggleGroupSocial"/>
         </fx:define>
         <children>
-            <RadioButton fx:id="radioButtonVK" text="Вконтакте" toggleGroup="$toggleGroupSocial"
-                         GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <RadioButton fx:id="radioButtonFB" text="Facebook" toggleGroup="$toggleGroupSocial"
+            <JFXRadioButton fx:id="radioButtonVK" text="Вконтакте" toggleGroup="$toggleGroupSocial"
+                            GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <JFXRadioButton fx:id="radioButtonFB" text="Facebook" toggleGroup="$toggleGroupSocial"
                          GridPane.columnIndex="1" GridPane.rowIndex="2" />
         </children>
 
@@ -30,14 +33,16 @@
         <CheckBox text="Facebook"  fx:id="checkBoxFB" GridPane.columnIndex="1" GridPane.rowIndex="2" selected="true"/>
         -->
     <Label text="Информация" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <CheckBox text="Фотография" fx:id="checkBoxPhoto" GridPane.columnIndex="0" GridPane.rowIndex="4"
+        <JFXCheckBox text="Фотография" fx:id="checkBoxPhoto" GridPane.columnIndex="0" GridPane.rowIndex="4"
                   selected="true" />
-        <CheckBox text="Имя" fx:id="checkBoxName" GridPane.columnIndex="0" GridPane.rowIndex="5" selected="true"/>
-        <CheckBox text="Дата рождения" fx:id="checkBoxBirthday" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-        <CheckBox text="Город" fx:id="checkBoxCity" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-        <CheckBox text="Место работы" fx:id="checkBoxJob" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-        <CheckBox text="Телефон" fx:id="checkBoxPhone" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-    <Button text="Сохранить" fx:id="buttonSaveSettings" GridPane.columnIndex="0" GridPane.rowIndex="9" onAction="#handleSaveSettings"/>
-    <Button text="Отмена" fx:id="buttonCancelSettings" GridPane.columnIndex="1" GridPane.rowIndex="9" onAction="#handleCancelSettings"/>
+        <JFXCheckBox text="Имя" fx:id="checkBoxName" GridPane.columnIndex="0" GridPane.rowIndex="5" selected="true"/>
+        <JFXCheckBox text="Дата рождения" fx:id="checkBoxBirthday" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <JFXCheckBox text="Город" fx:id="checkBoxCity" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <JFXCheckBox text="Место работы" fx:id="checkBoxJob" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <JFXCheckBox text="Телефон" fx:id="checkBoxPhone" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <JFXButton text="Сохранить" fx:id="buttonSaveSettings" GridPane.columnIndex="0" GridPane.rowIndex="9"
+               onAction="#handleSaveSettings" styleClass="button-raised"/>
+    <JFXButton text="Отмена" fx:id="buttonCancelSettings" GridPane.columnIndex="1" GridPane.rowIndex="9"
+               onAction="#handleCancelSettings" styleClass="button-raised"/>
 
 </GridPane>

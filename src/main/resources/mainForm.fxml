@@ -6,6 +6,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <BorderPane fx:id="borderPane" fx:controller="gui.MainFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@fxml.css"/>
@@ -21,48 +23,43 @@
     </top>
 
     <left>
-        <GridPane hgap="15" vgap="15">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
-            </padding>
-            <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
-                <Image url="test4.jpg"/>
-            </ImageView>
-            <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="1" GridPane.columnIndex="0">
+        <ScrollPane>
+            <GridPane hgap="15" vgap="15">
                 <padding>
-                    <Insets right="25" bottom="25" left="25"/>
+                    <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>
-                <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
-                    <Label text="Настроить:"/>
-                    <fx:define>
-                        <ToggleGroup fx:id="toggleGroupSettings"/>
-                    </fx:define>
-                    <children>
-                        <RadioButton fx:id="radioButtonCount" text="Количество результатов" toggleGroup="$toggleGroupSettings"
-                                     selected="true" onAction="#handleRadioButtonCount"/>
-                        <RadioButton fx:id="radioButtonQuality" text="Качество результатов" toggleGroup="$toggleGroupSettings"
-                                        selected="false" onAction="#handleRadioButtonQuality"/>
-                    </children>
-                </VBox>
-                <!--><VBox GridPane.rowIndex="2" GridPane.columnIndex="1">
-                    <Label text="Поиск:"/>
-                    <CheckBox text="Вконтакте"/>
-                    <CheckBox text="Facebook"/>
-                </VBox>
-                <VBox fx:id="vBoxSlider" GridPane.rowIndex="2" GridPane.columnIndex="2">
-                </VBox><-->
+                <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
+                    <Image url="test4.jpg"/>
+                </ImageView>
+                <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                    <padding>
+                        <Insets right="25" bottom="25" left="25"/>
+                    </padding>
+                    <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
+                        <Label text="Настроить:"/>
+                        <fx:define>
+                            <ToggleGroup fx:id="toggleGroupSettings"/>
+                        </fx:define>
+                        <children>
+                            <JFXRadioButton fx:id="radioButtonCount" text="Количество результатов" toggleGroup="$toggleGroupSettings"
+                                         selected="true" onAction="#handleRadioButtonCount"/>
+                            <JFXRadioButton fx:id="radioButtonQuality" text="Качество результатов" toggleGroup="$toggleGroupSettings"
+                                            selected="false" onAction="#handleRadioButtonQuality"/>
+                        </children>
+                    </VBox>
+                </GridPane>
+                <BorderPane GridPane.rowIndex="2" GridPane.columnIndex="0">
+                    <center>
+                        <JFXButton text="Найти" styleClass="button-raised"/>
+                    </center>
+                </BorderPane>
             </GridPane>
-            <BorderPane GridPane.rowIndex="2" GridPane.columnIndex="0">
-                <center>
-                    <Button text="Найти"/>
-                </center>
-            </BorderPane>
-        </GridPane>
+        </ScrollPane>
     </left>
 
-    <right>
-        <HBox>
-            <ScrollPane fx:id="scrollPaneSubscription" minWidth="500">
+    <center>
+        <!--<HBox>-->
+            <ScrollPane fx:id="scrollPaneSubscription" minWidth="600"  >
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>
@@ -70,7 +67,8 @@
                     <URL value="@fxml.css"/>
                 </stylesheets>
             </ScrollPane>
-        </HBox>
-    </right>
+        <!--</HBox>-->
+
+    </center>
 
 </BorderPane>

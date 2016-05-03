@@ -1,6 +1,8 @@
 package gui;
 
 import aleksey2093.FriendSendResult;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSlider;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,7 +28,7 @@ public class MainFormController {
     private BorderPane borderPane;
     private VBox vBoxSlider = new VBox();
     private Label labelSlider = new Label();
-    Slider slider = new Slider();
+    JFXSlider slider = new JFXSlider();
     @FXML
     MenuBar menuBarMain;
 
@@ -41,16 +43,16 @@ public class MainFormController {
     }
 
     public VBox getvBoxSlider() {
-        Label label = new Label("Slider:");
+        Label label = new Label();
         HBox hBox = new HBox();
         slider.setMin(1);
         slider.setMax(50);
         slider.setValue(50);
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-                labelSlider.setText(String.format("%.0f", new_val));
-            }
-        });
+//        slider.valueProperty().addListener(new ChangeListener<Number>() {
+//            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+//                labelSlider.setText(String.format("%.0f", new_val));
+//            }
+//        });
         hBox.getChildren().addAll(slider, labelSlider);
         vBoxSlider.getChildren().addAll(label, hBox);
         return vBoxSlider;
@@ -85,10 +87,11 @@ public class MainFormController {
         return scrollPaneSubscription;
     }
 
-    private Button takeSubscriptionButton(SubscriptionDescriptor subscriptionDescriptor) {
-        Button buttonSubscription = new Button();
+
+    private JFXButton takeSubscriptionButton(SubscriptionDescriptor subscriptionDescriptor) {
+        final JFXButton buttonSubscription = new JFXButton();
         buttonSubscription.setText(subscriptionDescriptor.getSubscriptionName());
-        buttonSubscription.getStylesheets().add("sub.css");
+        buttonSubscription.getStyleClass().add("button-raised-sub");
         buttonSubscription.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent a) {
                 Stage stage = new Stage();
@@ -100,7 +103,7 @@ public class MainFormController {
                 }
 
                 Scene scene = new Scene(root, 600, 790);
-                stage.setTitle("Результаты поиска");
+                stage.setTitle("Результаты поиска для подписки на " + buttonSubscription.getText());
                 stage.setScene(scene);
                 stage.show();
             };

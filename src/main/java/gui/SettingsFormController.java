@@ -1,6 +1,9 @@
 package gui;
 
 import aleksey2093.GiveMeSettings;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,25 +23,25 @@ public class SettingsFormController extends SettingsDescriptor {
 //    @FXML
 //    CheckBox checkBoxFB;
     @FXML
-    RadioButton radioButtonVK;
+    JFXRadioButton radioButtonVK;
     @FXML
-    RadioButton radioButtonFB;
+    JFXRadioButton radioButtonFB;
     @FXML
-    CheckBox checkBoxPhoto;
+    JFXCheckBox checkBoxPhoto;
     @FXML
-    CheckBox checkBoxName;
+    JFXCheckBox checkBoxName;
     @FXML
-    CheckBox checkBoxBirthday;
+    JFXCheckBox checkBoxBirthday;
     @FXML
-    CheckBox checkBoxCity;
+    JFXCheckBox checkBoxCity;
     @FXML
-    CheckBox checkBoxJob;
+    JFXCheckBox checkBoxJob;
     @FXML
-    CheckBox checkBoxPhone;
+    JFXCheckBox checkBoxPhone;
     @FXML
-    Button buttonSaveSettings;
+    JFXButton buttonSaveSettings;
     @FXML
-    Button buttonCancelSettings;
+    JFXButton buttonCancelSettings;
 
     SettingsDescriptor settingsDescriptor = new SettingsDescriptor();
 

@@ -8,10 +8,10 @@ root {
 }
 
 .label {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+    -fx-font-family: "Roboto Medium";
+	-fx-font-size: 14.0;
+	-fx-font-weight: bold;
+
 }
 HBox {
     -fx-spacing: 15px;
@@ -44,8 +44,29 @@ ScrollPane {
     -fx-background-radius: 9;
 }*/
 .slider {
-    -fx-show-tick-labels: true;
-    -fx-show-tick-marks: true;
+    -fx-show-tick-labels: false;
+    -fx-show-tick-marks: false;
     -fx-major-tick-unit: 25;
     -fx-minor-tick-count: 5;
+}
+.button-raised{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -fx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-pref-width: 200;
+    -fx-text-fill: WHITE;
+}
+.button-raised-sub{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-button-type: RAISED;
+    -fx-background-color: WHITE;
+    -fx-pref-width: 200;
+    -fx-text-fill: rgb(77,102,204);
+}
+.custom-jfx-check-box{
+    -fx-checked-color: RED;
+    -fx-unchecked-color: BLACK;
 }
