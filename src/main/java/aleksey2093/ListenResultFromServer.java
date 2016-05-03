@@ -1,11 +1,15 @@
 package aleksey2093;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Optional;
 
 //import javax.swing.*;
 
@@ -96,10 +100,16 @@ public class ListenResultFromServer {
                     String login = new String(msgbyte, 3, msgbyte[2], "UTF-8");
 
                     System.out.println("Посмотреть результат пользователя - " + login + "? (yes/no)");
-                /*int qeees = JOptionPane.showConfirmDialog(null, "Посмотреть результат пользователя - "
-                        + login + "? (yes/no)", "Сообщение от " + login, JOptionPane.YES_NO_OPTION);
-                if (qeees != JOptionPane.YES_OPTION)
-                    break;*/
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Пришел результат");
+                    alert.setHeaderText("У пользователя " + login + " новый результат");
+                    alert.setContentText("Хотите посмотреть на результат '" + login + "'?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        System.out.println("Пользователь согласился посмотреть результат от " + login);
+                    } else if (result.get() == ButtonType.CANCEL) {
+                        continue;
+                    }
 
                     //Мы получили от пользователя разрешение посмотреть на результат запрос от пользователя
                     int jb = 3 + msgbyte[2];
@@ -107,7 +117,11 @@ public class ListenResultFromServer {
                 * Начинаем его обрабатывать и потом передать в систему выдачи */
                     if (jb >= len) {
                         System.out.println("Результат пользователя пуст");
-                        //JOptionPane.showMessageDialog(null, "Результат пользователя пуст", "Пусто", JOptionPane.INFORMATION_MESSAGE);
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Информация");
+                        alert.setHeaderText("");
+                        alert.setContentText("Результат " + login + " пуст");
+                        alert.showAndWait();
                         break;
                     }
                     ArrayList<String> links = new ArrayList<String>();
