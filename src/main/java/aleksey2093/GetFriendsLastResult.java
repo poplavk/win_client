@@ -82,7 +82,15 @@ public class GetFriendsLastResult {
         }
         j=2;
         //дешефруем тут
-        if (msg[1] != 2 && msg[1] != 3) {
+            if (message_byte[1] == (byte)103) {
+                System.out.println("Неправильный логин или пароль. Тип: " + message_byte[1]);
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Информация");
+                alert.setHeaderText("Ошибка входа");
+                alert.setContentText("Неправильный логин или пароль");
+                alert.showAndWait();
+                return null;
+            } else if (msg[1] != 3) {
             return null;
         }
         try {
