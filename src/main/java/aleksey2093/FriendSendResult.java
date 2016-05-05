@@ -86,11 +86,18 @@ public class FriendSendResult {
                     message_byte = new byte[inputStream.available()];
                     len = inputStream.read(message_byte);
                 }
-                if (message_byte[1] != (byte) 1) {
+                if (message_byte[1] == (byte)101) {
+                    System.out.println("Неправильный логин или пароль. Тип: " + message_byte[1]);
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Информация");
+                    alert.setHeaderText("Ошибка входа");
+                    alert.setContentText("Неправильный логин или пароль");
+                    alert.showAndWait();
+                    break;
+                } else if (message_byte[1] != (byte) 1) {
                     System.out.println("Получили левый ответ с сервера. Тип: " + message_byte[1]);
                     continue;
-                }
-                else {
+                } else {
                     System.out.println("Получен ответ. Начинается обработка данных.");
                 }
                 //нужно ли на сервер отправить ответ о принятии пакета или о том, что на пришла хрень
