@@ -82,7 +82,15 @@ public class ListenResultFromServer {
                 * msgbyte[3] - логин
                  * msgbyte[3+msgbyte[2]] - длинна ссылки
                  */
-                    if (msgbyte[1] != 4) {
+                    if (message_byte[1] == (byte)102) {
+                        System.out.println("Неправильный логин или пароль. Тип: " + message_byte[1]);
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Информация");
+                        alert.setHeaderText("Ошибка входа");
+                        alert.setContentText("Неправильный логин или пароль");
+                        alert.showAndWait();
+                        break;
+                    } else if (msgbyte[1] != 2) {
                         System.out.println("Получили левое сообщение. Продолжаем прослушку.");
                         continue;
                     }
