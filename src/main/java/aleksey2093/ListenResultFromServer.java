@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class ListenResultFromServer {
     /*
-    Класс постоянно прослушивает сообщения с сервера, чтобы поймать сообщение о входящем рузльтате подписчика.
+    Класс постоянно прослушивает сообщения с сервера, чтобы поймать сообщение о входящем результате подписчика.
      */
     private static Thread thread;
     public void startListen() {
