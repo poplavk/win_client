@@ -1,5 +1,6 @@
 package aleksey2093;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.io.DataInputStream;
@@ -154,11 +155,15 @@ public class FriendSendResult {
 
     private void showDialogInformation()
     {
-        System.out.println("Неправильный логин или пароль.");
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Информация");
-        alert.setHeaderText("Ошибка входа");
-        alert.setContentText("Неправильный логин или пароль");
-        alert.showAndWait();
+        Platform.runLater(new Runnable() {
+            public void run() {
+                System.out.println("Неправильный логин или пароль.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Информация");
+                alert.setHeaderText("Ошибка входа");
+                alert.setContentText("Неправильный логин или пароль");
+                alert.showAndWait();
+            }
+        });
     }
 }
