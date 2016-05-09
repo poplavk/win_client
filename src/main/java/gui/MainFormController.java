@@ -1,18 +1,23 @@
 package gui;
 
 import aleksey2093.FriendSendResult;
+import aleksey2093.ListenResultFromServer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -34,7 +39,12 @@ public class MainFormController {
 
     public void initialize() {
         getGridPaneShortSettings();
-        getScrollPaneResult();
+        new Thread(new Runnable() {
+            public void run() {
+                getScrollPaneResult();
+            }
+        }).start();
+        new ListenResultFromServer().startListenThread();
     }
 
     public GridPane getGridPaneShortSettings() {
@@ -71,19 +81,21 @@ public class MainFormController {
     }
 
     public ScrollPane getScrollPaneResult() {
-        for (int i = 0; i < 30; i++) {
+        /*for (int i = 0; i < 30; i++) {
             SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor("Подписка  " + i);
             gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
-        }
-      /*  FriendSendResult friendSendResult = new FriendSendResult();
-        friendSendResult.give_me_please_friends();
-        ArrayList<String> list = friendSendResult.getListFriends();
-
-        for (int i = 0; i < list.toArray().length; i++) {
-            SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));//("Подписка  " + i);
-            gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
         }*/
-        scrollPaneSubscription.setContent(gridPane);
+        FriendSendResult friendSendResult = new FriendSendResult();
+        ArrayList<String> list = friendSendResult.getListFriends();
+        for (int i = 0; i < list.size(); i++) {
+            SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));
+            gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
+        }
+        Platform.runLater(new Runnable() { //обновит панель из главного потока
+            public void run() {
+                scrollPaneSubscription.setContent(gridPane);
+            }
+        });
         return scrollPaneSubscription;
     }
 
