@@ -169,7 +169,7 @@ public class ListenResultFromServer {
     private void formationListLinks(byte[] msg, int len, String login) {
         //Мы получили от пользователя разрешение посмотреть на результат запрос от пользователя
         int jb = 3 + msg[2];
-                /*и так мы получили список ссылок разделенных проблем.
+                /*и так мы получили список ссылок в виде (4 байта длинна, ссылка, 4 байта длинна, ссылка....).
                 * Начинаем его обрабатывать и потом передать в систему выдачи */
         if (jb >= len) {
             getResDialogWindow(2,null);
@@ -195,7 +195,7 @@ public class ListenResultFromServer {
         //GetSomePrivateData getSomePrivateData = new GetSomePrivateData();
         //getSomePrivateData.vkGet(links, giveMeSettings.getSocialStg());
     }
-
+    //вырезать ид из ссылки
     private String getIdFromLink(String link) {
         String tmp = null;
         if (link.toCharArray()[link.length() - 1] == '/')
