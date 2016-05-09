@@ -1,54 +1,103 @@
 package aleksey2093;
 
-import gui.MainFormController;
+import javafx.scene.control.Alert;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class FriendSendResult {
 
-    ArrayList<String> listfrends = new ArrayList<String>();
+    private ArrayList<String> listfrends = new ArrayList<String>();
 
-    public ArrayList getListFriends()
-    {
-        if (listfrends.toArray().length == 0) { give_me_please_friends(); }
-        return listfrends;
+
+    public ArrayList getListFriends() {
+        boolean res = downloadListFriends();
+        if (res) {
+            return listfrends;
+        } else {
+            return null;
+        }
     }
 
-    public byte give_me_please_friends() {
+    private boolean downloadListFriends() {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
-        boolean ok = false;
-        byte err = 0;
-        Socket sock;
-        DataOutputStream outputStream;
-        DataInputStream inputStream;
-        while (true) {
-            try {
-                if ((sock = giveMeSettings.getSocket(false)) == null) {
-                    return -1;
-                }
-                outputStream = new DataOutputStream(sock.getOutputStream());
-                inputStream = new DataInputStream(sock.getInputStream());
-                break;
-            } catch (Exception ex) {
-                if (ex.getMessage().startsWith("В соединении отказано")) {
-                    try {
-                        Thread.sleep(3000);
-                        err++;
-                        if (err > 9) {
-                            return -2;
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                System.err.println("Ошиюка подключения " + ex.getMessage() + "\n" + ex.toString());
-            }
+        Socket socket = getSocket(giveMeSettings);
+        if (socket == null)
+            return false;
+        try {
+            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+
+            if (sendMsgToServer(giveMeSettings, outputStream))
+                if (readMsgFromServer(giveMeSettings, inputStream))
+                    return true;
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-//запрашиваем список подписок
+    }
+
+
+
+    private boolean readMsgFromServer(GiveMeSettings giveMeSettings, DataInputStream inputStream) {
+        int len = 0;
+        byte[] msg = new byte[1];
+        try {
+            while (len == 0) {
+                msg = new byte[inputStream.available()];
+                len = inputStream.read(msg);
+            }
+            //дешифруем
+            if (msg[1] == (byte) 101) {
+                showDialogInformation();
+                return false;
+            } else if (msg[1] != (byte) 1) {
+                System.out.println("Получили неправильный ответ с сервера. Тип: " + msg[1]);
+                return false;
+            }
+            System.out.println("Получен ответ. Начинается обработка данных.");
+            if (!formationListFriends(msg, len))
+                return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean formationListFriends(byte[] msg, int len) {
+        int j = 2;
+        if (len <= j) {
+            System.out.println("Подписчиков нет");
+            return false;
+        }
+        while (j < len) {
+            /* ключ пока нигде не используется, поэтому просто будем собирать, но не хранить
+            * как вариант можно выводить его в списке подписок и по клику отправлять его
+            * на сервер, а не строковый логин */
+            int key = java.nio.ByteBuffer.wrap(msg, j, 4).getInt();
+            j += 4;
+            int lenlogin = msg[j];
+            j++;
+            try {
+                String tess = new String(msg, j, lenlogin, "UTF-8");
+                listfrends.add(tess);
+            } catch (UnsupportedEncodingException e) {
+                System.out.println("Ошибка обработки имени подписчика");
+                e.printStackTrace();
+            }
+            j += lenlogin;
+        }
+        return listfrends.size() != 0;
+    }
+
+    private boolean sendMsgToServer(GiveMeSettings giveMeSettings, DataOutputStream outputStream) {
         byte[] login = giveMeSettings.getLpk((byte) 1);
         byte[] pass = giveMeSettings.getLpk((byte) 2);
         byte[] message_byte = new byte[1 + 1 + 1 + login.length + 1 + pass.length];
@@ -70,64 +119,44 @@ public class FriendSendResult {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return -3;
+            return false;
         }
         try {
             outputStream.write(message_byte);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return -4;
+            return false;
         }
         System.out.println("Отправлено");
-        try {
-            while (true) {
-                int len = 0;
-                while (len == 0) {
-                    message_byte = new byte[inputStream.available()];
-                    len = inputStream.read(message_byte);
-                }
-                if (message_byte[1] != (byte) 1) {
-                    System.out.println("Получили левый ответ с сервера. Тип: " + message_byte[1]);
-                    continue;
-                }
-                else {
-                    System.out.println("Получен ответ. Начинается обработка данных.");
-                }
-                //нужно ли на сервер отправить ответ о принятии пакета или о том, что на пришла хрень
-                try {
-                    sock.close(); //закрываем сокет за ненадобностью
-                } catch (Exception ex) {
-                    if (sock.isConnected()) {
-                        sock.close();
+        return true;
+    }
+
+    private Socket getSocket(GiveMeSettings giveMeSettings) {
+        int err = 0;
+        while (true) {
+            try {
+                return new Socket(giveMeSettings.getServerName(2), giveMeSettings.getServerPort(2));
+            } catch (Exception ex) {
+                    err++;
+                    if (err > 9)
+                        return null;
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }
-                //тут будет вызов функции дешифруем все, что после нулевого байта
-                if (len <= 2) {
-                    System.out.println("Подписчкиво нет");
-                    return 2;
-                }
-                j = 2;
-                while (j<len){
-                    /* ключ пока нигде не используется, поэтому просто будем собирать, но не хранить
-                    * как вариант можно выводить его в списке подписок и по клику отправлять его
-                    * на сервер, а не строковый логин */
-                    int key = java.nio.ByteBuffer.wrap(message_byte,j,4).getInt();
-                    j+=4;
-                    int lenloginnow = message_byte[j]; j++;
-                    String tess = new String(message_byte, j, lenloginnow, "UTF-8");
-                    listfrends.add(tess); j+=lenloginnow;
-                }
-                System.out.println("Список подписок");
-                for (int i = 0; i < listfrends.toArray().length; i++) {
-                    System.out.println((i + 1) + "  key: " + i + " login: " + listfrends.get(i));
-                }
-                //getScrollPaneResult(listlogin);
-                return 1;
+                System.err.println("Ошибка подключения " + ex.getMessage() + "\n" + ex.toString());
             }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-            return -5;
         }
+    }
+
+    private void showDialogInformation()
+    {
+        System.out.println("Неправильный логин или пароль.");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Информация");
+        alert.setHeaderText("Ошибка входа");
+        alert.setContentText("Неправильный логин или пароль");
+        alert.showAndWait();
     }
 }
