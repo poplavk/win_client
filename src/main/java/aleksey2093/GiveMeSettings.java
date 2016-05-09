@@ -108,6 +108,7 @@ public class GiveMeSettings {
         } catch (Exception ex) {
             res = new byte[1];
             res[0] = -1;
+            ex.printStackTrace();
         }
         return res;
     }
