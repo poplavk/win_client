@@ -1,5 +1,6 @@
 package aleksey2093;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.io.DataInputStream;
@@ -105,7 +106,7 @@ public class GetFriendsLastResult {
             try {
                 String link = new String(msg, i, lenlink, "UTF-8");
                 link = getIdFromLink(link);
-                if (link != null)
+                if (link != null && link.length() != 0)
                     arrayList.add(link);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -116,16 +117,21 @@ public class GetFriendsLastResult {
     }
 
     private String getIdFromLink(String link) {
-        String tmp = null;
+        String tmp = "";
         if (link.toCharArray()[link.length() - 1] == '/')
-            link = link.substring(0, link.length() - 2);
-        for (int i = link.length() - 1; i >= 0; i--) {
+            tmp = link.substring(0, link.length() - 2);
+        int i = link.length() - 1;
+        while (i >= 0 && link.toCharArray()[i] != '/'){
             tmp = link.toCharArray()[i] + tmp;
+            i--;
         }
         return tmp;
     }
 
-    private void showDialogInform(boolean what, String string) {
+    private void showDialogInform(final boolean what, final String string) {
+        Platform.runLater(new Runnable() {
+            public void run() {
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Информация");
         if (what) {
@@ -138,5 +144,7 @@ public class GetFriendsLastResult {
             alert.setContentText("Результат " + string + " оказался пуст");
         }
         alert.showAndWait();
+            }
+        });
     }
 }
