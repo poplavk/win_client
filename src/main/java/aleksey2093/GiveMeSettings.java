@@ -9,6 +9,7 @@ import java.util.Properties;
 
 public class GiveMeSettings {
 
+    //загружает файл настроек
     public Properties loadSettingFile() {
         FileInputStream fis;
         Properties property = new Properties();
@@ -22,7 +23,7 @@ public class GiveMeSettings {
         }
         return property;
     }
-
+    //фильтр и количество.
     public byte[] getFilter(byte bit) {
         if (bit == 1) {
             byte[] mass;
@@ -41,9 +42,8 @@ public class GiveMeSettings {
         mass[0] = -1;
         return mass;
     }
-
+    //не использовать!
     public Socket getSocket(int what) {
-        //дописать
         Socket socket;
         String serverName;
         int serverPort;
@@ -69,7 +69,7 @@ public class GiveMeSettings {
             }
         }
     }
-
+    //1 - эталон, 2 - подписки, 3 - прослушка
     public String getServerName(int what) {
         if (what == 1)
             return loadSettingFile().getProperty("server.name_send");
@@ -80,7 +80,7 @@ public class GiveMeSettings {
         else
             return null;
     }
-
+    //1 - эталон, 2 - подписки, 3 - прослушка
     public int getServerPort(int what) {
         if (what == 1)
             return Integer.parseInt(loadSettingFile().getProperty("server.port_send"));
@@ -91,7 +91,7 @@ public class GiveMeSettings {
         else
             return -1;
     }
-
+    
     public byte[] getSocialStg() {
         byte[] res = new byte[9];
         Properties props = loadSettingFile();
@@ -111,7 +111,7 @@ public class GiveMeSettings {
         }
         return res;
     }
-
+    //сохранение настроек
     public boolean setSaveSettingWindow(boolean[] tmp, String encr) {
         Properties properties = loadSettingFile();
         properties.setProperty("socialnetwork", (tmp[0] ? "0" : "1"));
@@ -136,7 +136,7 @@ public class GiveMeSettings {
             return false;
         }
     }
-
+    //логин пользователя и пароль. 1 - логин, 2 - пароль
     public byte[] getLpk(byte bit) {
         byte[] mass = new byte[1];
         mass[0] = -1;
@@ -162,7 +162,8 @@ public class GiveMeSettings {
         }
         return mass;
     }
-
+    
+    //тип шифрования
     public byte getEncryption() {
         try {
             return Byte.parseByte(loadSettingFile().getProperty("encryption"));
