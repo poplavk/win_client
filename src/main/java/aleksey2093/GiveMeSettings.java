@@ -9,6 +9,7 @@ import java.util.Properties;
 
 public class GiveMeSettings {
 
+    //загружает файл настроек
     public Properties loadSettingFile() {
         FileInputStream fis;
         Properties property = new Properties();
@@ -22,37 +23,37 @@ public class GiveMeSettings {
         }
         return property;
     }
-
+    //фильтр и количество.
     public byte[] getFilter(byte bit) {
         if (bit == 1) {
             byte[] mass;
             Properties props = loadSettingFile();
-            if (props == null) { mass = new byte[1]; mass[0] = -1; return mass; }
+            if (props == null) {
+                mass = new byte[1];
+                mass[0] = -1;
+                return mass;
+            }
             mass = new byte[2];
             mass[0] = Byte.parseByte(props.getProperty("filter"));
             mass[1] = Byte.parseByte(props.getProperty("count"));
             return mass;
         }
-        byte[] mass = new byte[1]; mass[0] =  -1 ;
+        byte[] mass = new byte[1];
+        mass[0] = -1;
         return mass;
     }
-    public Socket getSocket(boolean what) {
-        //дописать
-        Socket socket = null;
+    //не использовать!
+    public Socket getSocket(int what) {
+        Socket socket;
         String serverName;
         int serverPort;
-        if (what) {
-            serverName = getServerName(true);
-            serverPort = getServerPort(true);
-        } else {
-            serverName = getServerName(false);
-            serverPort = getServerPort(false);
-        }
+        serverName = getServerName(what);
+        serverPort = getServerPort(what);
         int err = 0;
         while (true) {
             try {
                 socket = new Socket(serverName, serverPort);
-                break;
+                return socket;
             } catch (Exception ex) {
                 System.out.println("Не удается подключиться");
                 err++;
@@ -61,42 +62,37 @@ public class GiveMeSettings {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (err>9)
-                {
+                if (err > 9) {
                     System.out.println("Закончились попытки подключения");
-                    return socket;
+                    return null;
                 }
             }
         }
-        return socket;
     }
-
-    public String getServerName(boolean what)
-    {
-        if (what)
-        {
+    //1 - эталон, 2 - подписки, 3 - прослушка
+    public String getServerName(int what) {
+        if (what == 1)
             return loadSettingFile().getProperty("server.name_send");
-        }
+        else if (what == 2)
+            return loadSettingFile().getProperty("server.name_friend");
+        else if (what == 3)
+            return loadSettingFile().getProperty("server.name_listen");
         else
-        {
-            return loadSettingFile().getProperty("server.name");
-        }
+            return null;
     }
-
-    public int getServerPort (boolean what)
-    {
-        if (what == true)
-        {
+    //1 - эталон, 2 - подписки, 3 - прослушка
+    public int getServerPort(int what) {
+        if (what == 1)
             return Integer.parseInt(loadSettingFile().getProperty("server.port_send"));
-        }
+        else if (what == 2)
+            return Integer.parseInt(loadSettingFile().getProperty("server.port_friend"));
+        else if (what == 3)
+            return Integer.parseInt(loadSettingFile().getProperty("server.port_listen"));
         else
-        {
-            return Integer.parseInt(loadSettingFile().getProperty("server.port"));
-        }
+            return -1;
     }
-
-    public byte[] getSocialStg()
-    {
+    
+    public byte[] getSocialStg() {
         byte[] res = new byte[9];
         Properties props = loadSettingFile();
         try {
@@ -109,78 +105,69 @@ public class GiveMeSettings {
             res[6] = Byte.parseByte(props.getProperty("social.phone"));
             res[7] = Byte.parseByte(props.getProperty("social.del"));
             res[8] = Byte.parseByte(props.getProperty("social.close"));
-        } catch (Exception ex)
-        {
-            res = new byte[1]; res[0] = -1;
+        } catch (Exception ex) {
+            res = new byte[1];
+            res[0] = -1;
         }
         return res;
     }
-    public void  setSaveSettingWindow(boolean[] tmp, String encr)
-    {
+    //сохранение настроек
+    public boolean setSaveSettingWindow(boolean[] tmp, String encr) {
         Properties properties = loadSettingFile();
-        if (tmp[0])
-        {
-            if (tmp[1]) {
-                properties.setProperty("socialnetwork","3");
-            }
-            else {
-                properties.setProperty("socialnetwork","1");
-            }
+        properties.setProperty("socialnetwork", (tmp[0] ? "0" : "1"));
+        if (encr.equals("AES")) {
+            properties.setProperty("encryption", "1");
+        } else if (encr.equals("RSA")) {
+            properties.setProperty("encryption", "2");
+        } else if (encr.equals("ГОСТ")) {
+            properties.setProperty("encryption", "3");
         }
-        else {
-            if (tmp[1]) {
-                properties.setProperty("socialnetwork","2");
-            } else {
-                properties.setProperty("socialnetwork","0");
-            }
-        }
-        if (encr == "AES") { properties.setProperty("encryption","1"); }
-        else if (encr == "RSA") { properties.setProperty("encryption","2"); }
-        else if (encr == "ГОСТ") { properties.setProperty("encryption","3"); }
-        properties.setProperty("social.photo",(tmp[2]?"1":"0"));
-        properties.setProperty("social.fio",(tmp[3]?"1":"0"));
-        properties.setProperty("social.datebith",(tmp[4]?"1":"0"));
-        properties.setProperty("social.city",(tmp[5]?"1":"0"));
-        properties.setProperty("social.work",(tmp[6]?"1":"0"));
-        properties.setProperty("social.phone",(tmp[7]?"1":"0"));
+        properties.setProperty("social.photo", (tmp[1] ? "1" : "0"));
+        properties.setProperty("social.fio", (tmp[2] ? "1" : "0"));
+        properties.setProperty("social.datebith", (tmp[3] ? "1" : "0"));
+        properties.setProperty("social.city", (tmp[4] ? "1" : "0"));
+        properties.setProperty("social.work", (tmp[5] ? "1" : "0"));
+        properties.setProperty("social.phone", (tmp[6] ? "1" : "0"));
         try {
-            properties.store(new FileOutputStream("src/main/resources/settingfile.properties"),null);
+            properties.store(new FileOutputStream("src/main/resources/settingfile.properties"), null);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
-
-    public byte[] getLpk(byte bit)
-    {
-        byte[] mass = new byte[1]; mass[0] = -1;
+    //логин пользователя и пароль. 1 - логин, 2 - пароль
+    public byte[] getLpk(byte bit) {
+        byte[] mass = new byte[1];
+        mass[0] = -1;
         if (bit > 0 && bit < 4)//логин
         {
-            String str = null; int key;
+            String str = null;
+            int key;
             if (bit == 3 && (key = Integer.parseInt(loadSettingFile().getProperty("sys.key"))) > -1) {
                 mass = java.nio.ByteBuffer.allocate(4).putInt(key).array();
-            }
-            else {
+            } else {
                 if (bit == 1) str = loadSettingFile().getProperty("sys.login");
                 else if (bit == 2) str = loadSettingFile().getProperty("sys.pass");
-                if (str != "-1" && str != null) {
+                if (!str.equals("-1") && str != null) {
                     mass = new byte[str.length()];
                     for (int i = 0; i < str.length(); i++) {
                         mass[i] = (byte) str.toCharArray()[i];
                     }
                 }
             }
+        } else {
+            mass[0] = -2;
+            return mass;
         }
-        else { mass[0] = -2; return mass; }
         return mass;
     }
-
-    public byte getEncryption()
-    {
+    
+    //тип шифрования
+    public byte getEncryption() {
         try {
             return Byte.parseByte(loadSettingFile().getProperty("encryption"));
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return -1;
         }
     }

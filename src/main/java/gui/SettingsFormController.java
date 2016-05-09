@@ -113,7 +113,7 @@ public class SettingsFormController extends SettingsDescriptor {
 //                        checkBoxVK.isSelected(),
 //                        checkBoxFB.isSelected(),
                         radioButtonVK.isSelected(),
-                        radioButtonFB.isSelected(),
+//                        radioButtonFB.isSelected(),
                         checkBoxPhoto.isSelected(),
                         checkBoxName.isSelected(),
                         checkBoxBirthday.isSelected(),
