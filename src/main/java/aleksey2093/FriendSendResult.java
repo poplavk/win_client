@@ -77,6 +77,7 @@ public class FriendSendResult {
             System.out.println("Подписчиков нет");
             return false;
         }
+        ArrayList<String> stringArrayList = new ArrayList<String>();
         while (j < len) {
             /* ключ пока нигде не используется, поэтому просто будем собирать, но не хранить
             * как вариант можно выводить его в списке подписок и по клику отправлять его
@@ -87,13 +88,14 @@ public class FriendSendResult {
             j++;
             try {
                 String tess = new String(msg, j, lenlogin, "UTF-8");
-                listfrends.add(tess);
+                stringArrayList.add(tess);
             } catch (UnsupportedEncodingException e) {
                 System.out.println("Ошибка обработки имени подписчика");
                 e.printStackTrace();
             }
             j += lenlogin;
         }
+        listfrends = stringArrayList;
         return listfrends.size() != 0;
     }
 
@@ -141,7 +143,7 @@ public class FriendSendResult {
                     if (err > 9)
                         return null;
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
