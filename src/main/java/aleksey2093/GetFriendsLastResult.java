@@ -93,7 +93,7 @@ public class GetFriendsLastResult {
             showDialogInform(false, friend);
             return null;
         }
-        formationListLinks(msg, len, friend);
+        arrayList = formationListLinks(msg, len, friend);
         return arrayList;
     }
 
