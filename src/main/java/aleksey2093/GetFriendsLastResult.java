@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class GetFriendsLastResult {
 
-    //возвращает лист подписчиков при выборе подписчика в списке
+    //при выборе подписчика в списке возвращает ArrayList<String> содержащий id для передачи в подсистемы загрузки данных 
     public ArrayList<String> getLastResult(String friend) {
         ArrayList<String> list = new ArrayList<String>();
         GiveMeSettings giveMeSettings = new GiveMeSettings();
