@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
-<?import Delov.MyImage?>
+<?import delov.MyImage?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import com.jfoenix.controls.JFXButton?>
