@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import Delov.MyImage?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import com.jfoenix.controls.JFXButton?>
@@ -16,6 +16,7 @@
         <MenuBar fx:id="menuBarMain">
             <Menu text="Меню">
                 <MenuItem fx:id="menuItemNewFind" onAction="#handleMenuItemNewFind" text="Новый поиск"/>
+                <MenuItem fx:id="menuItemSaveImage" onAction="#handleMenuSaveImage" text="Сохранить изображение"/>
                 <MenuItem fx:id="menuItemSettings" onAction="#handleMenuItemSettings" text="Настройки"/>
                 <MenuItem fx:id="menuItemExit" onAction="#handleMenuItemExit" text="Выход"/>
             </Menu>
@@ -28,10 +29,19 @@
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>
-                <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
-                    <Image url="test4.jpg"/>
-                </ImageView>
-                <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <MyImage fx:id="image" GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
+                    <image>
+                        <Image url="test4.jpg"/>
+                    </image>
+                </MyImage>
+                <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" >
+                    <HBox>
+                        <Button fx:id="MakeF" text="Сделать фото" onAction="#makeFoto"/>
+                        <Button id="LoadF" text="Загрузить фото" onAction="#loadFoto"/>
+                        <Button id="OrigF" text="Вернуть оригинал" onAction="#originalFoto"/>
+                    </HBox>
+                </GridPane>
+                <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="2" GridPane.columnIndex="0">
                     <padding>
                         <Insets right="25" bottom="25" left="25"/>
                     </padding>
@@ -48,7 +58,7 @@
                         </children>
                     </VBox>
                 </GridPane>
-                <BorderPane GridPane.rowIndex="2" GridPane.columnIndex="0">
+                <BorderPane GridPane.rowIndex="3" GridPane.columnIndex="0">
                     <center>
                         <JFXButton text="Найти" styleClass="button-raised"/>
                     </center>

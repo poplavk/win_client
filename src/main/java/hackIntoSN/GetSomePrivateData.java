@@ -1,23 +1,27 @@
 package hackIntoSN;
 
-import java.net.*;
+import aleksey2093.GiveMeSettings;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.FacebookClient.AccessToken;
+import com.restfb.exception.FacebookGraphException;
+import com.restfb.types.User;
+
 import java.io.*;
-import java.util.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import javafx.scene.image.Image;
 
-import com.restfb.*;
-import com.restfb.FacebookClient.*;
+import java.util.Scanner;
 
-import com.google.gson.*;
-import com.restfb.exception.*;
-import com.restfb.types.*;
-
-// GSON
-// search.maven.org/remotecontent?filepath=com/google/code/gson/gson/2.6.2/gson-2.6.2.jar
-// restfb
-// http://mvnrepository.com/artifact/com.restfb/restfb/1.22.0
 /**
  * Created by Suharev on 20.03.2016.
- * Updated on 26.04.2016.
+ * Updated on 9.05.2016.
  */
 
 public class GetSomePrivateData {
@@ -39,7 +43,7 @@ public class GetSomePrivateData {
     //Этот метод отличается только тем, что проверяет объекты внутри объекта Json
     public String vkcheckfield(JsonElement user,String fname,String subname)
     {
-        String field=null;
+        String field;
         try{
             JsonObject userObject = user.getAsJsonObject();
             JsonObject userObject2;
@@ -48,20 +52,24 @@ public class GetSomePrivateData {
             field=userObject2.get(subname).getAsString();
         }catch(NullPointerException npe)
         {
-            field=null;
+            field="";
         }
         return field;
     }
 
     //links - массив идентификаторов пользователя, которые хотим отправить, setts-массив с настройками
-    public int vkGet(ArrayList<String> links, byte[] setts)
+    public ArrayList<PersonInfo> vkGet(ArrayList<String> links)
     {
+        GiveMeSettings giveMeSettings = new GiveMeSettings();
+        byte[] setts = giveMeSettings.getSocialStg();
+        if (setts[0] == -1)
+            return null;
         String urlParameters = null;
         byte cnt=0;
         //String[] gender = {"Не указан", "Женский","Мужской"};//Пригодится, если захотим вывести пол
         URL url;
         HttpURLConnection connection = null;
-        String[][] results=new String[links.size()][7]; //Массив результатов, его отправить в нужный метод GUI стоит
+        ArrayList<PersonInfo> results = new ArrayList<PersonInfo>();
         System.out.println("Берём данные из Вк");
         while(cnt<links.size())
         {
@@ -102,33 +110,33 @@ public class GetSomePrivateData {
                 JsonArray pItem = mainObject.getAsJsonArray("response");
                 //Заполняем массив результатов, отталкиваясь от массива настроек
                 for (JsonElement user : pItem) {
-                    if(setts[1]==1)results[cnt][0]=vkcheckfield(user,"photo_max_orig");
-                    if(setts[2]==1){results[cnt][1]=vkcheckfield(user,"first_name"); results[cnt][2]=vkcheckfield(user,"last_name");}
-                    if(setts[3]==1)results[cnt][3]=vkcheckfield(user,"bdate");
-                    if(setts[4]==1){results[cnt][4]=vkcheckfield(user,"country","title"); results[cnt][5]=vkcheckfield(user,"city","title");}
-                    if(setts[5]==1)results[cnt][5]=vkcheckfield(user,"occupation","name");
-                    if(setts[6]==1)results[cnt][6]=vkcheckfield(user,"contacts","phone");
-                    //Не знаю, что делать с последними двумя
+                    PersonInfo pi = new PersonInfo();
+                    if(setts[1]==1)pi.image=new Image(vkcheckfield(user,"photo_max_orig"));
+                    if(setts[2]==1){pi.first_name=vkcheckfield(user,"first_name"); pi.last_name=vkcheckfield(user,"last_name");}
+                    if(setts[3]==1)pi.birthday=vkcheckfield(user,"bdate");
+                    if(setts[4]==1){pi.country=vkcheckfield(user,"country","title"); pi.city=vkcheckfield(user,"city","title");}
+                    if(setts[5]==1)pi.occupation=vkcheckfield(user,"occupation","name");
+                    if(setts[6]==1)pi.phone=vkcheckfield(user,"contacts","phone");
+                    pi.link=links.get(cnt);
+                    results.add(pi);
                 }
             }catch(Exception e){
                 System.out.println("Серверы vk не отвечают на запрос");
                 e.printStackTrace();
                 System.out.println(e.getMessage());
+                assert connection != null;
                 connection.disconnect();
-                return -1;
+                return null;
             }
             connection.disconnect();
             cnt++;
         }
         //Если надо проверить содержимое рез. массива
-        /*for(int i=0;i<links.size();i++)
+        for(int i=0;i<links.size();i++)
         {
-            for(int j=0;j<7;j++)
-            {
-                System.out.println(results[i][j]);
-            }
-        }*/
-        return 0;
+            System.out.println(results.get(i));
+        }
+        return results;
     }
 
     public int fbGet(ArrayList<String> links)

@@ -1,5 +1,6 @@
 package gui;
 
+import hackIntoSN.PersonInfo;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,21 +13,22 @@ public class PersonDescriptor extends HBox {
     private Label city;
     private Label birthday;
 
-    public PersonDescriptor(/**/) {
-        photo = new Image("test2.jpg");
-        name = new Label("Вася Пупкин");
-        birthday = new Label("13 марта");
-        city = new Label("Москва");
+    public PersonDescriptor(PersonInfo personinfo/**/) {
+        photo = personinfo.image;//new Image("test2.jpg");
+        name = new Label(personinfo.last_name + " " + personinfo.first_name);//new Label("Вася Пупкин");
+        birthday = new Label(personinfo.birthday);//new Label(/*"13 марта"*/);
+        city = new Label(personinfo.city);//new Label("Москва");
 
         Label nameLabel = new Label("Фамилия Имя:");
         Label birthdayLabel = new Label("Дата рождения:");
         Label cityLabel = new Label("Город:");
 
         ImageView photoView = new ImageView(photo);
+        photoView.setFitHeight(100);
+        photoView.setFitWidth(100);
 
         VBox vBoxLabel = new VBox();
         VBox vBoxInfo = new VBox();
-
 
         vBoxLabel.getChildren().addAll(nameLabel,birthdayLabel,cityLabel);
         vBoxInfo.getChildren().addAll(name,birthday,city);

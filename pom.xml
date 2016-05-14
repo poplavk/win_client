@@ -20,11 +20,18 @@
             <version>2.6.2</version>
         </dependency>
         <dependency>
-            <groupId>org.jfoenix</groupId>
-            <artifactId>jfoenix</artifactId>
-            <version>3.0</version>
+        <groupId>org.jfoenix</groupId>
+        <artifactId>jfoenix</artifactId>
+        <version>3.0</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/lib/jfoenix.jar</systemPath>
+    </dependency>
+        <dependency>
+            <groupId>org.opencv</groupId>
+            <artifactId>opencv</artifactId>
+            <version>3.1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/jfoenix.jar</systemPath>
+            <systemPath>${project.basedir}/lib/opencv-310.jar</systemPath>
         </dependency>
     </dependencies>
 

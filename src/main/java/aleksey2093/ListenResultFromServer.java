@@ -1,10 +1,17 @@
 package aleksey2093;
 
+import gui.ResultsFormController;
+import hackIntoSN.GetSomePrivateData;
+import hackIntoSN.PersonInfo;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
@@ -21,7 +28,7 @@ public class ListenResultFromServer {
     Класс постоянно прослушивает сообщения с сервера, чтобы поймать сообщение о входящем результате подписчика.
      */
     private static Thread thread;
-    public void startListen() {
+    public void startListenThread() {
         thread = new Thread(new Runnable() {
             public void run() {
                 int err = 0;
@@ -40,7 +47,7 @@ public class ListenResultFromServer {
         thread.start();
         thread.isInterrupted();
     }
-    public void stopListen() {
+    public void stopListenThread() {
         thread.stop();
     }
 
@@ -98,11 +105,14 @@ public class ListenResultFromServer {
     private boolean startSocketNewAccept(Socket socket) {
         try {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-            int len = 0;
+            int len = 0, err = 0;
             byte[] msg = new byte[0];
             while (len == 0) { //запускаем прослушку
                 msg = new byte[inputStream.available()];
                 len = inputStream.read(msg);
+                err++;
+                if (err > 100000)
+                    return false;
             }
             msgPostsProcessing(msg, len);
             return true;
@@ -111,43 +121,47 @@ public class ListenResultFromServer {
         }
     }
 
-    private boolean getResDialogWindow(int what, String login) {
-        if (what == 1) {
-            System.out.println("Посмотреть результат пользователя - " + login + "? (yes/no)");
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Пришел результат");
-            alert.setHeaderText("У пользователя " + login + " новый результат");
-            alert.setContentText("Хотите посмотреть на результат '" + login + "'?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                System.out.println("Пользователь согласился посмотреть результат от " + login);
-                return true;
-            } else
-                return false;
-        } else if (what == 2) {
-            System.out.println("Результат пользователя пуст");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Информация");
-            alert.setHeaderText("");
-            alert.setContentText("Результат " + login + " пуст");
-            alert.showAndWait();
-            return true;
-        } else if (what == 3) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Информация");
-            alert.setHeaderText("Ошибка входа");
-            alert.setContentText("Неправильный логин или пароль");
-            alert.showAndWait();
-            return true;
-        }
-        return false;
+    private boolean getResDialogWindow(final int what, final String login, final byte[] msg, final int len) {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                if (what == 1) {
+                    System.out.println("Посмотреть результат пользователя - " + login + "? (yes/no)");
+                    final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Пришел результат");
+                    alert.setHeaderText("У пользователя " + login + " новый результат");
+                    alert.setContentText("Хотите посмотреть на результат '" + login + "'?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        System.out.println("Пользователь согласился посмотреть результат от " + login);
+                        formationListLinks(msg,len,login);
+                    } //else
+                        //return false;
+                } else if (what == 2) {
+                    System.out.println("Результат пользователя пуст");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Информация");
+                    alert.setHeaderText("");
+                    alert.setContentText("Результат " + login + " пуст");
+                    alert.showAndWait();
+                    //return true;
+                } else if (what == 3) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Информация");
+                    alert.setHeaderText("Ошибка входа");
+                    alert.setContentText("Неправильный логин или пароль");
+                    alert.showAndWait();
+                    //return true;
+                }
+            }
+        });
+        return true;
     }
     private void msgPostsProcessing(byte[] msg, int len)
     {
         //дешифруем
         if (msg[1] == (byte)102) {
             System.out.println("Неправильный логин или пароль. Тип: " + msg[1]);
-            getResDialogWindow(3,null);
+            getResDialogWindow(3,null,null,-1);
         } else if (msg[1] != 2) {
             System.out.println("Получили левое сообщение. Продолжаем прослушку.");
         } else if (msg[2] < 1) {
@@ -156,9 +170,10 @@ public class ListenResultFromServer {
         } else {
             try {
                 String login = new String(msg, 3, msg[2], "UTF-8");
-                if (!getResDialogWindow(1,login))
+                /*if (!getResDialogWindow(1,login))
                     return;
-                formationListLinks(msg,len,login);
+                //formationListLinks(msg,len,login);*/
+                getResDialogWindow(1,login,msg,len);
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -172,7 +187,8 @@ public class ListenResultFromServer {
                 /*и так мы получили список ссылок в виде (4 байта длинна, ссылка, 4 байта длинна, ссылка....).
                 * Начинаем его обрабатывать и потом передать в систему выдачи */
         if (jb >= len) {
-            getResDialogWindow(2,null);
+            getResDialogWindow(2,null,null,-1);
+            return;
         }
         ArrayList<String> links = new ArrayList<String>();
         while (jb < len) {
@@ -182,7 +198,7 @@ public class ListenResultFromServer {
                 String link = null;
                 link = new String(msg, jb, size, "UTF-8");
                 link = getIdFromLink(link);
-                if (link != null)
+                if (link != null && link.length() != 0)
                     links.add(link);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -192,16 +208,42 @@ public class ListenResultFromServer {
         for (int i = 0; i < links.toArray().length; i++) {
             System.out.println("Ссылка по запросу пользователя (" + login + "): " + links.get(i));
         }
-        //GetSomePrivateData getSomePrivateData = new GetSomePrivateData();
-        //getSomePrivateData.vkGet(links, giveMeSettings.getSocialStg());
+        GetSomePrivateData getSomePrivateData = new GetSomePrivateData();
+        showWindowResult(getSomePrivateData.vkGet(links),login);
     }
+
+    private boolean showWindowResult(final ArrayList<PersonInfo> list, final String login) {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                Stage stage = new Stage();
+                Parent root = null;
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("resultsForm.fxml"));
+                    root = loader.load();
+                    ResultsFormController resultsFormController = loader.<ResultsFormController>getController();
+                    resultsFormController.setParametr(list);
+                    resultsFormController.getScrollPaneResult();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Scene scene = new Scene(root, 600, 790);
+                stage.setTitle("Результаты поиска для подписки на " + login);
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+        return true;
+    }
+
     //вырезать ид из ссылки
     private String getIdFromLink(String link) {
-        String tmp = null;
+        String tmp = "";
         if (link.toCharArray()[link.length() - 1] == '/')
-            link = link.substring(0, link.length() - 2);
-        for (int i = link.length() - 1; i >= 0; i--) {
+            tmp = link.substring(0, link.length() - 2);
+        int i = link.length() - 1;
+        while (i >= 0 && link.toCharArray()[i] != '/'){
             tmp = link.toCharArray()[i] + tmp;
+            i--;
         }
         return tmp;
     }
