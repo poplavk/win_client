@@ -1,3 +1,4 @@
+//На случай, если понадобится что-то проверить
 package hackDB;
 
 import ru.mephi.oauthtest.GetSomePrivateData;
