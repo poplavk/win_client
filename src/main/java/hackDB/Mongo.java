@@ -1,4 +1,4 @@
-package ru.mephi.hackDB;
+package hackDB;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
