@@ -8,10 +8,14 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.geometry.Insets?>
 <GridPane fx:controller="gui.SettingsFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@fxml.css"/>
     </stylesheets>
+    <padding>
+        <Insets top="20" left="20" right="20" bottom="20"/>
+    </padding>
     <Label text="Тип шифрования" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
     <ChoiceBox fx:id="choiceBoxEncryptType" GridPane.columnIndex="1" GridPane.rowIndex="0">
         <items>
@@ -24,7 +28,7 @@
         <children>
             <JFXRadioButton fx:id="radioButtonVK" text="Вконтакте" toggleGroup="$toggleGroupSocial"
                             GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <JFXRadioButton fx:id="radioButtonFB" text="Facebook" toggleGroup="$toggleGroupSocial"
+            <JFXRadioButton fx:id="radioButtonFB" text="База данных Pry" toggleGroup="$toggleGroupSocial"
                          GridPane.columnIndex="1" GridPane.rowIndex="2" />
         </children>
 

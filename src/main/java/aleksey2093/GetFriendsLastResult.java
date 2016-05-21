@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
@@ -150,6 +151,8 @@ public class GetFriendsLastResult {
                 Scene scene = new Scene(root, 600, 790);
                 stage.setTitle("Результаты поиска для подписки на " + login);
                 stage.setScene(scene);
+//                stage.setResizable(false);
+                stage.getIcons().add(new Image("icon.png"));
                 stage.show();
             }
         });

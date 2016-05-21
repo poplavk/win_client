@@ -1,8 +1,6 @@
 //На случай, если понадобится что-то проверить
 package hackDB;
 
-import ru.mephi.oauthtest.GetSomePrivateData;
-
 import java.util.ArrayList;
 
 /**
@@ -19,7 +17,7 @@ public class Main {
         mydb.picField="PImage";
         if(mydb.DBConnect("127.0.0.1",4226,"PryDB","sa","111111"))
         {
-            ArrayList<String> list = new ArrayList<>();
+            ArrayList<String> list = new ArrayList<String>();
             //list = mydb.GetPhoto("Vlad","Ivanov","PersonInfo");
             list = mydb.GetData("Vlad","Ivanov","PersonInfo");
             //list = mydb.GetLink("Vlad","Ivanov","PersonInfo");

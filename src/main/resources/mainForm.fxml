@@ -23,9 +23,9 @@
         </MenuBar>
     </top>
 
-    <left>
+    <center>
         <ScrollPane>
-            <GridPane hgap="15" vgap="15">
+            <GridPane hgap="15" vgap="15" alignment="CENTER">
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>
@@ -34,13 +34,11 @@
                         <Image url="test4.jpg"/>
                     </image>
                 </MyImage>
-                <GridPane GridPane.rowIndex="1" GridPane.columnIndex="0" >
-                    <HBox>
-                        <Button fx:id="MakeF" text="Сделать фото" onAction="#makeFoto"/>
-                        <Button id="LoadF" text="Загрузить фото" onAction="#loadFoto"/>
-                        <Button id="OrigF" text="Вернуть оригинал" onAction="#originalFoto"/>
-                    </HBox>
-                </GridPane>
+                <HBox GridPane.rowIndex="1" GridPane.columnIndex="0">
+                    <JFXButton fx:id="MakeF" text="Сделать фото" onAction="#makeFoto" styleClass="button-raised-photo"/>
+                    <JFXButton fx:id="LoadF" text="Загрузить фото" onAction="#loadFoto" styleClass="button-raised-photo"/>
+                    <JFXButton fx:id="OrigF" text="Вернуть оригинал" onAction="#originalFoto" styleClass="button-raised-photo"/>
+                </HBox>
                 <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="2" GridPane.columnIndex="0">
                     <padding>
                         <Insets right="25" bottom="25" left="25"/>
@@ -65,20 +63,22 @@
                 </BorderPane>
             </GridPane>
         </ScrollPane>
-    </left>
+    </center>
 
-    <center>
+    <right>
         <!--<HBox>-->
-            <ScrollPane fx:id="scrollPaneSubscription" minWidth="600"  >
+            <ScrollPane fx:id="scrollPaneSubscription">
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>
                 <stylesheets>
                     <URL value="@fxml.css"/>
                 </stylesheets>
+                <content>
+                    <GridPane fx:id="gridPane" />
+                </content>
             </ScrollPane>
         <!--</HBox>-->
-
-    </center>
+    </right>
 
 </BorderPane>

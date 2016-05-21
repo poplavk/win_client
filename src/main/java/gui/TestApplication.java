@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
 
@@ -22,6 +23,7 @@ public class TestApplication extends Application {
         stage.setTitle("Pry 1.0");
 
         stage.setScene(scene);
+        stage.getIcons().add(new Image("icon.png"));
         stage.show();
 
         //MainFormController controller = loader.getController();

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by Bill Gates on 15.05.2016.
  */
-public class SQL implements DBI {
+public class SQL implements DBInterface {
     Connection conn = null;
     String nameField;
     String lnameField;

@@ -4,7 +4,6 @@ root {
 .root {
     -fx-background-color:
     linear-gradient(to bottom, #f2f2f2, #d4d4d4);
-    -fx-padding:20px;
 }
 
 .label {
@@ -66,7 +65,38 @@ ScrollPane {
     -fx-pref-width: 200;
     -fx-text-fill: rgb(77,102,204);
 }
+.button-raised-photo{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-button-type: RAISED;
+    -fx-background-color: WHITE;
+    -fx-pref-width: 150;
+    -fx-text-fill: rgb(77,102,204);
+}
 .custom-jfx-check-box{
     -fx-checked-color: RED;
     -fx-unchecked-color: BLACK;
 }
+
+.radio-button-new-data {
+    -fx-mark-color: rgb(15,157,88);
+    -fx-mark-highlight-color: rgb(15,157,88);
+    -fx-size: 10;
+}
+
+.radio-button-new-data:disabled {
+    -fx-opacity: 1;
+}
+
+.radio-button-new-data .radio {
+   -fx-background-color: transparent;
+   -fx-border-color: transparent;
+   -fx-padding: 0px;
+}
+
+.radio-button-new-data .dot {
+    -fx-background-radius: 15px;
+    -fx-padding: 8px;
+}
+

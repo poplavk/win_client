@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Bill Gates on 13.05.2016.
  */
-public interface DBI {
+public interface DBInterface {
     ArrayList<String> GetPhoto(String a, String b, String c);
 
     ArrayList<String> GetLink(String a, String b, String c);

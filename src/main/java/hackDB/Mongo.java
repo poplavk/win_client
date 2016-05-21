@@ -1,6 +1,5 @@
 package hackDB;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class Mongo {
     String picField;
     ArrayList<String> GetPhoto(String name, String Sname, String Colname)
     {
-        ArrayList<String> list= new ArrayList<>();
+        ArrayList<String> list= new ArrayList<String>();
         DBCollection coll = db.getCollection(Colname);
         BasicDBObject query = new BasicDBObject(nameParam+"."+nameField, new BasicDBObject("$eq", name))
                 .append(nameParam+"."+lnameField, new BasicDBObject("$eq", Sname));
@@ -52,7 +51,7 @@ public class Mongo {
     }
     ArrayList<String> GetLink(String name, String Sname, String Colname)
     {
-        ArrayList<String> list= new ArrayList<>();
+        ArrayList<String> list= new ArrayList<String>();
         DBCollection coll = db.getCollection(Colname);
         BasicDBObject query = new BasicDBObject(nameParam+"."+nameField, new BasicDBObject("$eq", name))
                 .append(nameParam+"."+lnameField, new BasicDBObject("$eq", Sname));
@@ -82,7 +81,7 @@ public class Mongo {
     }
     ArrayList<String> GetName(String Link, String Colname)
     {
-        ArrayList<String> list= new ArrayList<>();
+        ArrayList<String> list= new ArrayList<String>();
         DBCollection coll = db.getCollection(Colname);
         BasicDBObject query = new BasicDBObject(linkField, new BasicDBObject("$eq", Link));
         DBCursor cursor = coll.find(query);
@@ -112,7 +111,7 @@ public class Mongo {
     ArrayList<String> GetData(String name, String Sname, String Colname)
     {
         Gson gson = new Gson();
-        ArrayList<String> list= new ArrayList<>();
+        ArrayList<String> list= new ArrayList<String>();
         Map<String, Object> map;
         DBCollection coll = db.getCollection(Colname);
         BasicDBObject query = new BasicDBObject(nameParam+"."+nameField, new BasicDBObject("$eq", name))
@@ -122,7 +121,7 @@ public class Mongo {
             try {
                 while (true) {
                     map = gson.fromJson(cursor.next().toString(), new TypeToken<Map<String, Object>>(){}.getType());
-                    map.forEach((x,y)-> list.add(y.toString()));
+//                    map.forEach((x,y)-> list.add(y.toString()));
                     if(!cursor.hasNext()) break;
                 }
                 cursor.close();

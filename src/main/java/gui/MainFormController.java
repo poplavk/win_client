@@ -11,12 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -41,6 +39,7 @@ public class MainFormController {
     private ScrollPane scrollPaneSubscription;
     @FXML
     private GridPane gridPaneShortSettings;
+    @FXML
     private GridPane gridPane;// = new GridPane();
     @FXML
     private BorderPane borderPane;
@@ -53,7 +52,7 @@ public class MainFormController {
     @FXML
     private MyImage image;
     @FXML
-    private Button MakeF;
+    private JFXButton MakeF;
 
     private Mat tmp;
     // a timer for acquiring the video stream
@@ -118,15 +117,20 @@ public class MainFormController {
     }
 
     public ScrollPane getScrollPaneResult() {
-        /*for (int i = 0; i < 30; i++) {
-            SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor("Подписка  " + i);
-            gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
-        }*/
+//        for (int i = 0; i < 30; i++) {
+//            SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor("Подписка  " + i);
+//            gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
+//        }
         FriendSendResult friendSendResult = new FriendSendResult();
         ArrayList<String> list = friendSendResult.getListFriends();
         for (int i = 0; i < list.size(); i++) {
             SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));
             gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
+            //Точка возле подписки, для редактированию пользователю недоступна
+            RadioButton radioButton = new RadioButton();
+            radioButton.setDisable(true);
+            radioButton.getStyleClass().add("radio-button-new-data");
+            gridPane.add(radioButton, 1, i);
         }
         Platform.runLater(new Runnable() { //обновит панель из главного потока
             public void run() {
@@ -145,6 +149,12 @@ public class MainFormController {
             public void handle(ActionEvent a) {
                 GetFriendsLastResult getFriendsLastResult = new GetFriendsLastResult();
                 getFriendsLastResult.GetLastResultThread(buttonSubscription.getText());
+                //Сброс зеленой точки по нажаию на подписку
+                Button pushedButton = (Button) a.getTarget();
+                int row = GridPane.getRowIndex(pushedButton);
+                int col = GridPane.getColumnIndex(pushedButton) + 1;
+                RadioButton radioButton = getNodeFromGridPane(col, row);
+                radioButton.setSelected(false);
                 //getFriendsLastResult.getLastResult(buttonSubscription.getText());
                 /*Stage stage = new Stage();
                 Parent root = null;
@@ -162,6 +172,14 @@ public class MainFormController {
         return buttonSubscription;
     }
 
+    private RadioButton getNodeFromGridPane(int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return (RadioButton) node;
+            }
+        }
+        return null;
+    }
 
     public void handleMenuItemNewFind(ActionEvent actionEvent) {
 
@@ -179,6 +197,8 @@ public class MainFormController {
         Scene scene = new Scene(root, 400, 400);
         stage.setTitle("Настройки");
         stage.setScene(scene);
+        stage.setResizable(false);
+        stage.getIcons().add(new Image("icon.png"));
         stage.show();
     }
 

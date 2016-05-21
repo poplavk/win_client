@@ -14,10 +14,14 @@ public class PersonDescriptor extends HBox {
     private Label birthday;
 
     public PersonDescriptor(PersonInfo personinfo/**/) {
-        photo = personinfo.image;//new Image("test2.jpg");
-        name = new Label(personinfo.last_name + " " + personinfo.first_name);//new Label("Вася Пупкин");
-        birthday = new Label(personinfo.birthday);//new Label(/*"13 марта"*/);
-        city = new Label(personinfo.city);//new Label("Москва");
+//        new Image("test2.jpg");
+//        new Label("Вася Пупкин");
+//        new Label("13 марта");
+//        new Label("Москва");
+        photo = personinfo.image;
+        name = new Label(personinfo.last_name + " " + personinfo.first_name);
+        birthday = new Label(personinfo.birthday);
+        city = new Label(personinfo.city);
 
         Label nameLabel = new Label("Фамилия Имя:");
         Label birthdayLabel = new Label("Дата рождения:");
