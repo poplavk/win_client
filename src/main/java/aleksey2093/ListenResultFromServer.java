@@ -1,5 +1,6 @@
 package aleksey2093;
 
+import gui.MainFormController;
 import gui.ResultsFormController;
 import hackIntoSN.GetSomePrivateData;
 import hackIntoSN.PersonInfo;
@@ -28,7 +29,11 @@ public class ListenResultFromServer {
     Класс постоянно прослушивает сообщения с сервера, чтобы поймать сообщение о входящем результате подписчика.
      */
     private static Thread thread;
-    public void startListenThread() {
+
+    private MainFormController mainFormController;
+
+    public void startListenThread(MainFormController mainFormController2) {
+        mainFormController = mainFormController2;
         thread = new Thread(new Runnable() {
             public void run() {
                 int err = 0;
@@ -173,7 +178,8 @@ public class ListenResultFromServer {
                 /*if (!getResDialogWindow(1,login))
                     return;
                 //formationListLinks(msg,len,login);*/
-                getResDialogWindow(1,login,msg,len);
+                //getResDialogWindow(1,login,msg,len); //окно уведомления о входящем результата
+                mainFormController.getRadioButton(login);
             }
             catch (Exception ex) {
                 ex.printStackTrace();
