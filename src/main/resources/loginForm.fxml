@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.GridPane?>
-<GridPane fx:id="gridPaneLogin" fx:controller="gui.loginFormController" xmlns:fx="http://javafx.com/fxml">
+
+<?import java.net.URL?>
+<GridPane fx:id="gridPaneLogin" fx:controller="gui.LoginFormController" xmlns:fx="http://javafx.com/fxml">
+    <stylesheets>
+        <URL value="@login.css"/>
+    </stylesheets>
 
 </GridPane>

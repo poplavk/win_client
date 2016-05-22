@@ -72,7 +72,7 @@ public class MainFormController {
             }
         }).start();
         new ListenResultFromServer().startListenThread();
-        this.capture = new VideoCapture(0);
+//        this.capture = new VideoCapture(0);
     }
 
     public  MainFormController() {
@@ -219,6 +219,7 @@ public class MainFormController {
      * The action triggered by pushing the button on the GUI
      */
     public void makeFoto(ActionEvent actionEvent) {
+        this.capture = new VideoCapture(0);
         // set a fixed width for the frame
         image.setFitWidth(400);
         // preserve image ratio

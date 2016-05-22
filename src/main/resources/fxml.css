@@ -71,7 +71,7 @@ ScrollPane {
     -fx-font-weight: bold;
     -fx-button-type: RAISED;
     -fx-background-color: WHITE;
-    -fx-pref-width: 150;
+    -fx-pref-width: 170;
     -fx-text-fill: rgb(77,102,204);
 }
 .custom-jfx-check-box{
