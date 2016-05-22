@@ -1,36 +1,36 @@
 package gui;
 
-import delov.MyImage;
 import aleksey2093.FriendSendResult;
 import aleksey2093.GetFriendsLastResult;
 import aleksey2093.ListenResultFromServer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
+import delov.MyImage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-
-import org.opencv.core.*;
+import javafx.stage.Stage;
+import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +72,7 @@ public class MainFormController {
                 getScrollPaneResult();
             }
         }).start();
-        new ListenResultFromServer().startListenThread();
+        new ListenResultFromServer().startListenThread(this);
 //        this.capture = new VideoCapture(0);
     }
 
@@ -96,6 +96,7 @@ public class MainFormController {
             //Точка возле подписки, для редактированию пользователю недоступна
             RadioButton radioButton = new RadioButton();
             radioButton.setDisable(true);
+            radioButton.setSelected(true);
             radioButton.getStyleClass().add("radio-button-new-data");
             gridPane.add(radioButton, 1, i);
         }
@@ -122,21 +123,16 @@ public class MainFormController {
                 int col = GridPane.getColumnIndex(pushedButton) + 1;
                 RadioButton radioButton = getNodeFromGridPane(col, row);
                 radioButton.setSelected(false);
-                //getFriendsLastResult.getLastResult(buttonSubscription.getText());
-                /*Stage stage = new Stage();
-                Parent root = null;
-                try {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("resultsForm.fxml"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Scene scene = new Scene(root, 600, 790);
-                stage.setTitle("Результаты поиска для подписки на " + buttonSubscription.getText());
-                stage.setScene(scene);
-                stage.show();*/
             };
         });
         return buttonSubscription;
+    }
+
+    public void getRadioButton(String name) {
+        for (Node node : gridPane.getChildren()) {
+            if (Objects.equals(((JFXButton) node).getText(), name))
+                getNodeFromGridPane(GridPane.getColumnIndex(node) + 1, GridPane.getRowIndex(node)).setSelected(true);
+        }
     }
 
     private RadioButton getNodeFromGridPane(int col, int row) {
