@@ -2,9 +2,19 @@
 <?import javafx.scene.layout.GridPane?>
 
 <?import java.net.URL?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <GridPane fx:id="gridPaneLogin" fx:controller="gui.LoginFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@login.css"/>
     </stylesheets>
-
+    <padding>
+        <Insets top="100" left="100" right="100" bottom="100"/>
+    </padding>
+    <JFXTextField fx:id="textFieldLogin" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <JFXPasswordField fx:id="passwordField" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <JFXButton fx:id="buttonLogin" text="Войти" GridPane.columnIndex="0" GridPane.rowIndex="2"
+               styleClass="button-raised" onAction="#handleButtonLogin"/>
 </GridPane>

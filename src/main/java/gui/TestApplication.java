@@ -15,10 +15,10 @@ public class TestApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // load the FXML resource
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("mainForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("loginForm.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 400, 400);
 
         stage.setTitle("Pry 1.0");
 
