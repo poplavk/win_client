@@ -8,6 +8,7 @@
 <?import java.net.URL?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXSlider?>
 <BorderPane fx:id="borderPane" fx:controller="gui.MainFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@fxml.css"/>
@@ -22,51 +23,56 @@
             </Menu>
         </MenuBar>
     </top>
-
+    <left>
+        <ScrollPane>
+            <content>
+                <GridPane fx:id="gridPaneShortSettings">
+                    <padding>
+                        <Insets top="25" right="25" bottom="25" left="25"/>
+                    </padding>
+                    <JFXButton fx:id="MakeF" text="Сделать фото" onAction="#makeFoto"
+                               GridPane.rowIndex="0" styleClass="button-raised-photo"/>
+                    <JFXButton fx:id="LoadF" text="Загрузить фото" onAction="#loadFoto"
+                               GridPane.rowIndex="1" styleClass="button-raised-photo"/>
+                    <JFXButton fx:id="OrigF" text="Вернуть оригинал" onAction="#originalFoto"
+                               GridPane.rowIndex="2" styleClass="button-raised-photo"/>
+                    <Label text="Настроить:" GridPane.rowIndex="3"/>
+                    <fx:define>
+                        <ToggleGroup fx:id="toggleGroupSettings"/>
+                    </fx:define>
+                    <children>
+                        <JFXRadioButton fx:id="radioButtonCount" text="Количество результатов"
+                                        toggleGroup="$toggleGroupSettings"
+                                        selected="true" onAction="#handleRadioButtonCount"
+                                        GridPane.rowIndex="4"/>
+                        <JFXRadioButton fx:id="radioButtonQuality" text="Качество результатов"
+                                        toggleGroup="$toggleGroupSettings"
+                                        selected="false" onAction="#handleRadioButtonQuality"
+                                        GridPane.rowIndex="6"/>
+                    </children>
+                    <JFXSlider fx:id="sliderCount" GridPane.rowIndex="5" orientation="HORIZONTAL" min="1" max="50"/>
+                    <JFXSlider fx:id="sliderQuality" GridPane.rowIndex="7" orientation="HORIZONTAL"
+                               min="50" max="100" disable="true"/>
+                    <JFXButton text="Найти"  GridPane.rowIndex="8" styleClass="button-raised"/>
+                </GridPane>
+            </content>
+        </ScrollPane>
+    </left>
     <center>
         <ScrollPane>
-            <GridPane hgap="15" vgap="15" alignment="CENTER">
-                <padding>
-                    <Insets top="25" right="25" bottom="25" left="25"/>
-                </padding>
-                <MyImage fx:id="image" GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
-                    <image>
-                        <Image url="test4.jpg"/>
-                    </image>
-                </MyImage>
-                <HBox GridPane.rowIndex="1" GridPane.columnIndex="0">
-                    <JFXButton fx:id="MakeF" text="Сделать фото" onAction="#makeFoto" styleClass="button-raised-photo"/>
-                    <JFXButton fx:id="LoadF" text="Загрузить фото" onAction="#loadFoto" styleClass="button-raised-photo"/>
-                    <JFXButton fx:id="OrigF" text="Вернуть оригинал" onAction="#originalFoto" styleClass="button-raised-photo"/>
-                </HBox>
-                <GridPane fx:id="gridPaneShortSettings" hgap="15" vgap="15" GridPane.rowIndex="2" GridPane.columnIndex="0">
-                    <padding>
-                        <Insets right="25" bottom="25" left="25"/>
-                    </padding>
-                    <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
-                        <Label text="Настроить:"/>
-                        <fx:define>
-                            <ToggleGroup fx:id="toggleGroupSettings"/>
-                        </fx:define>
-                        <children>
-                            <JFXRadioButton fx:id="radioButtonCount" text="Количество результатов" toggleGroup="$toggleGroupSettings"
-                                         selected="true" onAction="#handleRadioButtonCount"/>
-                            <JFXRadioButton fx:id="radioButtonQuality" text="Качество результатов" toggleGroup="$toggleGroupSettings"
-                                            selected="false" onAction="#handleRadioButtonQuality"/>
-                        </children>
-                    </VBox>
+            <content>
+                <GridPane hgap="15" vgap="15" alignment="CENTER">
+                    <MyImage fx:id="image" GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
+                        <image>
+                            <Image url="test4.jpg"/>
+                        </image>
+                    </MyImage>
                 </GridPane>
-                <BorderPane GridPane.rowIndex="3" GridPane.columnIndex="0">
-                    <center>
-                        <JFXButton text="Найти" styleClass="button-raised"/>
-                    </center>
-                </BorderPane>
-            </GridPane>
+            </content>
         </ScrollPane>
     </center>
 
     <right>
-        <!--<HBox>-->
             <ScrollPane fx:id="scrollPaneSubscription">
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
@@ -78,7 +84,6 @@
                     <GridPane fx:id="gridPane" />
                 </content>
             </ScrollPane>
-        <!--</HBox>-->
     </right>
 
 </BorderPane>

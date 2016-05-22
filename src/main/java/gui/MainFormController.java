@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -40,12 +41,13 @@ public class MainFormController {
     @FXML
     private GridPane gridPaneShortSettings;
     @FXML
+    private JFXSlider sliderCount;
+    @FXML
+    private JFXSlider sliderQuality;
+    @FXML
     private GridPane gridPane;// = new GridPane();
     @FXML
     private BorderPane borderPane;
-    private VBox vBoxSlider;// = new VBox();
-    private Label labelSlider; // = new Label();
-    JFXSlider slider; // = new JFXSlider();
     @FXML
     MenuBar menuBarMain;
 
@@ -65,7 +67,6 @@ public class MainFormController {
 
 
     public void initialize() {
-        getGridPaneShortSettings();
         new Thread(new Runnable() {
             public void run() {
                 getScrollPaneResult();
@@ -76,45 +77,11 @@ public class MainFormController {
     }
 
     public  MainFormController() {
-        slider = new JFXSlider();
         image = new MyImage();
-        vBoxSlider = new VBox();
-        labelSlider = new Label();
         gridPane = new GridPane();
     }
 
-    public GridPane getGridPaneShortSettings() {
-        gridPaneShortSettings.add(getvBoxSlider(), 2, 2);
-        return gridPaneShortSettings;
-    }
 
-    public VBox getvBoxSlider() {
-        Label label = new Label();
-        HBox hBox = new HBox();
-        slider.setMin(1);
-        slider.setMax(50);
-        slider.setValue(50);
-//        slider.valueProperty().addListener(new ChangeListener<Number>() {
-//            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-//                labelSlider.setText(String.format("%.0f", new_val));
-//            }
-//        });
-        hBox.getChildren().addAll(slider, labelSlider);
-        vBoxSlider.getChildren().addAll(label, hBox);
-        return vBoxSlider;
-    }
-
-    public void updateVBoxSliderQuality() {
-        slider.setMin(30);
-        slider.setMax(100);
-        slider.setValue(80);
-    }
-
-    public void updateVBoxSliderCount() {
-        slider.setMin(1);
-        slider.setMax(50);
-        slider.setValue(50);
-    }
 
     public ScrollPane getScrollPaneResult() {
 //        for (int i = 0; i < 30; i++) {
@@ -208,11 +175,13 @@ public class MainFormController {
     }
 
     public void handleRadioButtonCount(ActionEvent actionEvent) {
-        updateVBoxSliderCount();
+        sliderQuality.setDisable(true);
+        sliderCount.setDisable(false);
     }
 
     public void handleRadioButtonQuality(ActionEvent actionEvent) {
-        updateVBoxSliderQuality();
+        sliderQuality.setDisable(false);
+        sliderCount.setDisable(true);
     }
 
     /**
