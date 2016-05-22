@@ -1,6 +1,7 @@
 package gui;
 
 
+import aleksey2093.GiveMeSettings;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -13,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class LoginFormController {
@@ -38,12 +38,21 @@ public class LoginFormController {
         validatorLogin.setMessage("xox");
         validatorPassword.setMessage("oxo");
 
-//        validatorLogin.setIcon(new Icon(AwesomeIcon.WARNING,"2em",";","error"));
+        GiveMeSettings settings = new GiveMeSettings();
+        String login = settings.getLpkString(true);
+        String pass = settings.getLpkString(false);
+        if (login != null)
+            textFieldLogin.setText(login);
+        if (pass != null)
+            passwordField.setText(pass);
         textFieldLogin.getValidators().add(validatorLogin);
+        passwordField.getValidators().add(validatorPassword);
+//        validatorLogin.setIcon(new Icon(AwesomeIcon.WARNING,"2em",";","error"));
+        //textFieldLogin.getValidators().add(validatorLogin);
 //        textFieldLogin.focusedProperty().addListener((o,oldVal,newVal)->{
 //            if(!newVal) textFieldLogin.validate();
 //        });
-        passwordField.getValidators().add(validatorPassword);
+        //passwordField.getValidators().add(validatorPassword);
 //        passwordField.focusedProperty().addListener((o,oldVal,newVal)->{
 //            if(!newVal) passwordField.validate();
 //        });
@@ -51,6 +60,10 @@ public class LoginFormController {
 
     public void handleButtonLogin(ActionEvent actionEvent) {
         if ((textFieldLogin.getText().length() != 0) && (passwordField.getText().length() != 0)) {
+            GiveMeSettings settings = new GiveMeSettings();
+            settings.setLpkString(true,textFieldLogin.getText());
+            settings.setLpkString(false,passwordField.getText());
+
             Stage s = (Stage) buttonLogin.getScene().getWindow();
             s.close();
             Stage stage = new Stage();
