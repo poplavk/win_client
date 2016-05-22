@@ -137,6 +137,29 @@ public class GiveMeSettings {
             return false;
         }
     }
+
+    public String getLpkString(boolean b) {
+        if (b) {
+            return loadSettingFile().getProperty("sys.login");
+        } else {
+            return loadSettingFile().getProperty("sys.pass");
+        }
+    }
+
+    public void setLpkString(boolean b, String string) {
+        Properties properties = loadSettingFile();
+        if (b) {
+            properties.setProperty("sys.login", string);
+        } else {
+            properties.setProperty("sys.pass", string);
+        }
+        try {
+            properties.store(new FileOutputStream("src/main/resources/settingfile.properties"), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //логин пользователя и пароль. 1 - логин, 2 - пароль
     public byte[] getLpk(byte bit) {
         byte[] mass = new byte[1];
