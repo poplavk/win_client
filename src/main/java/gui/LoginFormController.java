@@ -40,30 +40,35 @@ public class LoginFormController {
 
 //        validatorLogin.setIcon(new Icon(AwesomeIcon.WARNING,"2em",";","error"));
         textFieldLogin.getValidators().add(validatorLogin);
-        textFieldLogin.focusedProperty().addListener((o,oldVal,newVal)->{
-            if(!newVal) textFieldLogin.validate();
-        });
+//        textFieldLogin.focusedProperty().addListener((o,oldVal,newVal)->{
+//            if(!newVal) textFieldLogin.validate();
+//        });
         passwordField.getValidators().add(validatorPassword);
-        passwordField.focusedProperty().addListener((o,oldVal,newVal)->{
-            if(!newVal) passwordField.validate();
-        });
+//        passwordField.focusedProperty().addListener((o,oldVal,newVal)->{
+//            if(!newVal) passwordField.validate();
+//        });
     }
 
     public void handleButtonLogin(ActionEvent actionEvent) {
-        Stage s = (Stage) buttonLogin.getScene().getWindow();
-        s.close();
-        Stage stage = new Stage();
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("mainForm.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if ((textFieldLogin.getText().length() != 0) && (passwordField.getText().length() != 0)) {
+            Stage s = (Stage) buttonLogin.getScene().getWindow();
+            s.close();
+            Stage stage = new Stage();
+            Parent root = null;
+            try {
+                root = FXMLLoader.load(getClass().getClassLoader().getResource("mainForm.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Scene scene = new Scene(root, 800, 600);
+            stage.setTitle("Pry 1.0");
+            stage.setScene(scene);
+            stage.getIcons().add(new Image("icon.png"));
+            stage.show();
         }
-
-        Scene scene = new Scene(root, 800, 600);
-        stage.setTitle("Pry 1.0");
-        stage.setScene(scene);
-        stage.getIcons().add(new Image("icon.png"));
-        stage.show();
+        else {
+            if (textFieldLogin.getText().length() == 0) textFieldLogin.validate();
+            if (passwordField.getText().length() == 0) passwordField.validate();
+        }
     }
 }
