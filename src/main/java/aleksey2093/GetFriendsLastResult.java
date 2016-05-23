@@ -16,6 +16,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -144,7 +145,11 @@ public class GetFriendsLastResult {
                     root = loader.load();
                     ResultsFormController resultsFormController = loader.<ResultsFormController>getController();
                     resultsFormController.setParametr(list);
-                    resultsFormController.getScrollPaneResult();
+                    try {
+                        resultsFormController.getScrollPaneResult();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -6,15 +6,21 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import com.jfoenix.controls.JFXPasswordField?>
-<GridPane fx:id="gridPaneLogin" fx:controller="gui.LoginFormController" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<GridPane fx:id="gridPaneLogin" fx:controller="gui.LoginFormController" xmlns:fx="http://javafx.com/fxml" alignment="CENTER">
     <stylesheets>
         <URL value="@login.css"/>
     </stylesheets>
     <padding>
-        <Insets top="100" left="100" right="100" bottom="100"/>
+        <Insets top="80" left="100" right="100" bottom="100"/>
     </padding>
-    <JFXTextField fx:id="textFieldLogin" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-    <JFXPasswordField fx:id="passwordField" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-    <JFXButton fx:id="buttonLogin" text="Войти" GridPane.columnIndex="0" GridPane.rowIndex="2"
+    <ImageView GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER">
+        <Image url="searcher.png"/>
+    </ImageView>
+    <JFXTextField fx:id="textFieldLogin" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="text-field-login"/>
+    <JFXPasswordField fx:id="passwordField" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="text-field-login"/>
+    <JFXButton fx:id="buttonLogin" text="Войти" GridPane.columnIndex="0" GridPane.rowIndex="3"
                styleClass="button-raised" onAction="#handleButtonLogin"/>
 </GridPane>

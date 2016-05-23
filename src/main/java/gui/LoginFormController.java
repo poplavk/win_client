@@ -29,14 +29,14 @@ public class LoginFormController {
     }
 
     public void setupTextField() {
-        textFieldLogin.setPromptText("Введите логин");
-        passwordField.setPromptText("Введите пароль");
+        textFieldLogin.setPromptText("Логин");
+        passwordField.setPromptText("Пароль");
 
         RequiredFieldValidator validatorLogin = new RequiredFieldValidator();
         RequiredFieldValidator validatorPassword = new RequiredFieldValidator();
 
-        validatorLogin.setMessage("xox");
-        validatorPassword.setMessage("oxo");
+        validatorLogin.setMessage("Ввведите логин");
+        validatorPassword.setMessage("Введите пароль");
 
         GiveMeSettings settings = new GiveMeSettings();
         String login = settings.getLpkString(true);
@@ -56,6 +56,7 @@ public class LoginFormController {
 //        passwordField.focusedProperty().addListener((o,oldVal,newVal)->{
 //            if(!newVal) passwordField.validate();
 //        });
+
     }
 
     public void handleButtonLogin(ActionEvent actionEvent) {
@@ -73,7 +74,7 @@ public class LoginFormController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Scene scene = new Scene(root, 800, 600);
+            Scene scene = new Scene(root, 1100, 600);
             stage.setTitle("Pry 1.0");
             stage.setScene(scene);
             stage.getIcons().add(new Image("icon.png"));

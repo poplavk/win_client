@@ -12,6 +12,8 @@ public class PersonDescriptor extends HBox {
     private Label name;
     private Label city;
     private Label birthday;
+    private Label phone;
+    private Label work;
 
     public PersonDescriptor(PersonInfo personinfo/**/) {
 //        new Image("test2.jpg");
@@ -22,12 +24,16 @@ public class PersonDescriptor extends HBox {
         name = new Label(personinfo.last_name + " " + personinfo.first_name);
         birthday = new Label(personinfo.birthday);
         city = new Label(personinfo.city);
+        phone = new Label(personinfo.phone);
 
         Label nameLabel = new Label("Фамилия Имя:");
         Label birthdayLabel = new Label("Дата рождения:");
         Label cityLabel = new Label("Город:");
+        Label phoneLabel = new Label("Телефон:");
+        Label workLabel = new Label("Место работы:");
 
         ImageView photoView = new ImageView(photo);
+        photoView.setPreserveRatio(true);
         photoView.setFitHeight(100);
         photoView.setFitWidth(100);
 

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -179,7 +180,7 @@ public class ListenResultFromServer {
                     return;
                 //formationListLinks(msg,len,login);*/
                 //getResDialogWindow(1,login,msg,len); //окно уведомления о входящем результата
-                mainFormController.getRadioButton(login);
+                mainFormController.changeRadioButton(login);
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -230,6 +231,8 @@ public class ListenResultFromServer {
                     resultsFormController.setParametr(list);
                     resultsFormController.getScrollPaneResult();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
                 Scene scene = new Scene(root, 600, 790);

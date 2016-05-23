@@ -128,7 +128,7 @@ public class MainFormController {
         return buttonSubscription;
     }
 
-    public void getRadioButton(String name) {
+    public void changeRadioButton(String name) {
         for (Node node : gridPane.getChildren()) {
             if (Objects.equals(((JFXButton) node).getText(), name))
                 getNodeFromGridPane(GridPane.getColumnIndex(node) + 1, GridPane.getRowIndex(node)).setSelected(true);

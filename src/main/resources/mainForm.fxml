@@ -62,9 +62,12 @@
         <ScrollPane>
             <content>
                 <GridPane hgap="15" vgap="15" alignment="CENTER">
+                    <padding>
+                        <Insets top="25" right="25" bottom="25" left="25"/>
+                    </padding>
                     <MyImage fx:id="image" GridPane.rowIndex="0" GridPane.columnIndex="0" pickOnBounds="true">
                         <image>
-                            <Image url="test4.jpg"/>
+                            <Image url="detective.png"/>
                         </image>
                     </MyImage>
                 </GridPane>

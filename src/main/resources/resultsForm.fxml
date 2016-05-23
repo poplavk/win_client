@@ -10,8 +10,7 @@
         <URL value="@fxml.css"/>
     </stylesheets>
     <center>
-        <HBox>
-            <ScrollPane fx:id="scrollPaneResults" minWidth="500">
+            <ScrollPane fx:id="scrollPaneResults">
                 <padding>
                     <Insets top="25" right="25" bottom="25" left="25"/>
                 </padding>
@@ -19,6 +18,5 @@
                     <URL value="@fxml.css"/>
                 </stylesheets>
             </ScrollPane>
-        </HBox>
     </center>
 </BorderPane>
