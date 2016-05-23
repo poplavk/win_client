@@ -3,6 +3,7 @@ package gui;
 import aleksey2093.GiveMeSettings;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 
 public class SettingsFormController extends SettingsDescriptor {
     @FXML
-    ChoiceBox choiceBoxEncryptType;
+    JFXComboBox choiceBoxEncryptType;
 //    @FXML
 //    CheckBox checkBoxVK;
 //    @FXML
@@ -50,7 +51,7 @@ public class SettingsFormController extends SettingsDescriptor {
         getAllSettings();
     }
 
-    public ChoiceBox getChoiceBoxEncryptType() {
+    public JFXComboBox getChoiceBoxEncryptType() {
         choiceBoxEncryptType.setItems(FXCollections.observableArrayList("AES", "RSA", "ГОСТ"));
         switch (settingsDescriptor.getEncryptNow())
         {

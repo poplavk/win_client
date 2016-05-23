@@ -9,6 +9,7 @@
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <GridPane fx:controller="gui.SettingsFormController" xmlns:fx="http://javafx.com/fxml">
     <stylesheets>
         <URL value="@fxml.css"/>
@@ -17,10 +18,10 @@
         <Insets top="20" left="20" right="20" bottom="20"/>
     </padding>
     <Label text="Тип шифрования" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-    <ChoiceBox fx:id="choiceBoxEncryptType" GridPane.columnIndex="1" GridPane.rowIndex="0">
-        <items>
+    <JFXComboBox fx:id="choiceBoxEncryptType" GridPane.columnIndex="1" GridPane.rowIndex="0">
+    <items>
         </items>
-    </ChoiceBox>
+    </JFXComboBox>
     <Label text="Социальные сети" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <fx:define>
             <ToggleGroup fx:id="toggleGroupSocial"/>
