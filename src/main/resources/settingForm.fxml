@@ -22,7 +22,7 @@
     <items>
         </items>
     </JFXComboBox>
-    <Label text="Социальные сети" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <Label text="Источник данных" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <fx:define>
             <ToggleGroup fx:id="toggleGroupSocial"/>
         </fx:define>

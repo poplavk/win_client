@@ -65,7 +65,6 @@ public class MainFormController {
     private boolean cameraActive;
 
 
-
     public void initialize() {
         new Thread(new Runnable() {
             public void run() {
@@ -80,7 +79,6 @@ public class MainFormController {
         image = new MyImage();
         gridPane = new GridPane();
     }
-
 
 
     public ScrollPane getScrollPaneResult() {
