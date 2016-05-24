@@ -52,7 +52,7 @@ public class SettingsFormController extends SettingsDescriptor {
     }
 
     public JFXComboBox getChoiceBoxEncryptType() {
-        choiceBoxEncryptType.setItems(FXCollections.observableArrayList("AES", "RSA", "ГОСТ"));
+        choiceBoxEncryptType.setItems(FXCollections.observableArrayList("AES", "RSA", "MD5"));
         switch (settingsDescriptor.getEncryptNow())
         {
             case 1:
@@ -62,7 +62,7 @@ public class SettingsFormController extends SettingsDescriptor {
                 choiceBoxEncryptType.setValue("RSA");
                 break;
             case 3:
-                choiceBoxEncryptType.setValue("ГОСТ");
+                choiceBoxEncryptType.setValue("MD5");
                 break;
         }
         return choiceBoxEncryptType;
