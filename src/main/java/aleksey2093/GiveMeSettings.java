@@ -71,25 +71,29 @@ public class GiveMeSettings {
     }
     //1 - эталон, 2 - подписки, 3 - прослушка
     public String getServerName(int what) {
-        if (what == 1)
-            return loadSettingFile().getProperty("server.name_send");
-        else if (what == 2)
-            return loadSettingFile().getProperty("server.name_friend");
-        else if (what == 3)
-            return loadSettingFile().getProperty("server.name_listen");
-        else
-            return null;
+        switch (what) {
+            case 1:
+                return loadSettingFile().getProperty("server.name_send");
+            case 2:
+                return loadSettingFile().getProperty("server.name_friend");
+            case 3:
+                return loadSettingFile().getProperty("server.name_listen");
+            default:
+                return null;
+        }
     }
     //1 - эталон, 2 - подписки, 3 - прослушка
     public int getServerPort(int what) {
-        if (what == 1)
-            return Integer.parseInt(loadSettingFile().getProperty("server.port_send"));
-        else if (what == 2)
-            return Integer.parseInt(loadSettingFile().getProperty("server.port_friend"));
-        else if (what == 3)
-            return Integer.parseInt(loadSettingFile().getProperty("server.port_listen"));
-        else
-            return -1;
+        switch (what) {
+            case 1:
+                return Integer.parseInt(loadSettingFile().getProperty("server.port_send"));
+            case 2:
+                return Integer.parseInt(loadSettingFile().getProperty("server.port_friend"));
+            case 3:
+                return Integer.parseInt(loadSettingFile().getProperty("server.port_listen"));
+            default:
+                return -1;
+        }
     }
     
     public byte[] getSocialStg() {
@@ -160,11 +164,20 @@ public class GiveMeSettings {
         }
     }
 
-    //логин пользователя и пароль. 1 - логин, 2 - пароль
-    public byte[] getLpk(byte bit) {
+    //логин пользователя и пароль. true - логин, false - пароль
+    public byte[] getLpk(boolean bit) {
         byte[] mass = new byte[1];
         mass[0] = -1;
-        if (bit > 0 && bit < 4)//логин
+        String str = "";
+        if (bit)
+            str = loadSettingFile().getProperty("sys.login");
+        else
+            str = loadSettingFile().getProperty("sys.pass");
+        if (str.length() == 0)
+            mass[0] = -1;
+        else
+            mass = str.getBytes();
+        /*if (bit > 0 && bit < 4)//логин
         {
             String str = null;
             int key;
@@ -183,7 +196,7 @@ public class GiveMeSettings {
         } else {
             mass[0] = -2;
             return mass;
-        }
+        }*/
         return mass;
     }
     

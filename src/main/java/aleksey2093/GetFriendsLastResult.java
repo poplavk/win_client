@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class GetFriendsLastResult {
 
-    public void GetLastResultThread(final String friend)
+    public void getLastResultThread(final String friend)
     {
         new Thread(new Runnable() {
             public void run() {
@@ -38,7 +38,7 @@ public class GetFriendsLastResult {
         }).start();
     }
     //при выборе подписчика в списке возвращает ArrayList<String> содержащий id для передачи в подсистемы загрузки данных 
-    public void getLastResult(String friend) {
+    private void getLastResult(String friend) {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
         Socket socket = null;
         DataOutputStream outputStream;
@@ -65,8 +65,8 @@ public class GetFriendsLastResult {
 
     private boolean sendRequestToServer(GiveMeSettings giveMeSettings, DataOutputStream outputStream, String friend) {
         try {
-            byte[] login = giveMeSettings.getLpk((byte) 1);
-            byte[] pass = giveMeSettings.getLpk((byte) 2);
+            byte[] login = giveMeSettings.getLpk(true);
+            byte[] pass = giveMeSettings.getLpk(false);
             //байт шифр, байт тип, байт длинны логина, логин, байт длинны пароля, пароль, логин друга (чей результат будем смотреть)
             byte[] msg = new byte[1 + 1 + 1 + login.length + 1 + pass.length + 1 + friend.getBytes().length];
             msg[0] = giveMeSettings.getEncryption();
@@ -113,6 +113,10 @@ public class GetFriendsLastResult {
             return;
         }
         formationListLinks(msg, len, friend);
+    }
+
+    public void resultSendPhoto(byte[] msg, int len, String login) {
+        formationListLinks(msg,len,login);
     }
 
     private void formationListLinks(byte[] msg, int len, String friend) {

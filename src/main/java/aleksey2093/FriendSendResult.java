@@ -44,8 +44,6 @@ public class FriendSendResult {
         }
     }
 
-
-
     private boolean readMsgFromServer(GiveMeSettings giveMeSettings, DataInputStream inputStream) {
         int len = 0;
         byte[] msg = new byte[1];
@@ -101,8 +99,8 @@ public class FriendSendResult {
     }
 
     private boolean sendMsgToServer(GiveMeSettings giveMeSettings, DataOutputStream outputStream) {
-        byte[] login = giveMeSettings.getLpk((byte) 1);
-        byte[] pass = giveMeSettings.getLpk((byte) 2);
+        byte[] login = giveMeSettings.getLpk(true);
+        byte[] pass = giveMeSettings.getLpk(false);
         byte[] message_byte = new byte[1 + 1 + 1 + login.length + 1 + pass.length];
         int j = 0;
         try {
