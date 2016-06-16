@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 
 /**
  * Created by aleks on 09.05.2016.
+ * Класс, содержащий информацию о человеке из внешнего источника
  */
 public class PersonInfo {
     public Image image;
