@@ -4,14 +4,29 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created by Bill Gates on 15.05.2016.
+ * Created by Suharev on 15.05.2016.
+ * Класс для работы с СУБД, работающих на SQL
+ * Наследует интерфейс DBI
+ * Содержит в себе 4 метода для формирования нужных запросов
+ * один метод для их исполнения,
+ * метод для установки соединения с БД
+ * и метод для разрыва соединения
  */
+ 
 public class SQL implements DBInterface {
     Connection conn = null;
     String nameField;
     String lnameField;
     String linkField;
     String picField;
+    
+    /**
+     * Метод принимает запрос в строковом виде от одной из формируюших его функций,
+     * выполняет его
+     * в случае успеха, кладёт полученные данные в строковый ArrayList
+     * @param input Запрос в строковом виде
+     * @return полученные результате в виде строкового ArrayList
+     */
     public ArrayList<String> QuerySQL(String input)
     {
         ArrayList<String> list = new ArrayList<String>();
@@ -48,6 +63,16 @@ public class SQL implements DBInterface {
         return null;
     }
 
+    /**
+     * Метод, формирующий запрос для получения фотографий пользователей, ФИО которых совпадает с запрашиваемым.
+     * затем этот запрос передаётся в метод QuerySQL, в котором выполняется.
+     * @param name Имя искомого пользователя
+     * @param Sname Фамилия искомого пользователя
+     * @param DBname Название БД, в которой его надо искать
+     * @return Хранимые в базе фотографии в строковом виде.
+     * Такой возвращаемый формат оправдан тем, что мы не знаем, в каком виде может храниться изображение,
+     * а String может хранить что угодно
+     */
     public ArrayList<String> GetPhoto(String name, String Sname, String DBname)
     {
         ArrayList<String> list;
@@ -71,6 +96,14 @@ public class SQL implements DBInterface {
         }
     }
 
+    /**
+     * Метод, формирующий запрос для получения ссылок пользователей, ФИО которых совпадает с запрашиваемым,
+     * затем этот запрос передаётся в метод QuerySQL, в котором выполняется.
+     * @param name Имя искомого пользователя
+     * @param Sname Фамилия искомого пользователя
+     * @param DBname Название БД, в которой его надо искать
+     * @return Хранимые в базе ссылки в строковом виде.
+     */
     public ArrayList<String> GetLink(String name, String Sname, String DBname)
     {
         ArrayList<String> list;
@@ -93,6 +126,14 @@ public class SQL implements DBInterface {
             return null;
         }
     }
+    
+    /**
+     * Метод, формирующий запрос для получения ФИО пользователей, ссылка которых совпадает с запрашиваемой,
+     * затем этот запрос передаётся в метод QuerySQL, в котором выполняется.
+     * @param Link Имя искомого пользователя
+     * @param DBname Название БД, в которой его надо искать
+     * @return Хранимые в базе ФИО в строковом виде.
+     */
     public ArrayList<String> GetName(String Link, String DBname)
     {
         ArrayList<String> list;
@@ -114,6 +155,16 @@ public class SQL implements DBInterface {
             return null;
         }
     }
+    
+    /**
+     * Метод, формирующий запрос для получения всей известноой информации о пользователях,
+     * ФИО которых совпадает с запрашиваемым,
+     * затем этот запрос передаётся в метод QuerySQL, в котором выполняется.
+     * @param name Имя искомого пользователя
+     * @param Sname Фамилия искомого пользователя
+     * @param DBname Название БД, в которой его надо искать
+     * @return Данные о человеке в строковом виде.
+     */
     public ArrayList<String> GetData(String name, String Sname, String DBname)
     {
         ArrayList<String> list;
@@ -136,6 +187,17 @@ public class SQL implements DBInterface {
             return null;
         }
     }
+    
+    /**
+     * Установка соединения с СУБД на SQL-подобных БД
+     * @param address - IP-адрес сервера БД
+     * @param port - TCP-порт, который прослушивает сервер
+     * @param DBNAme - Название нужной нам БД на сервере
+     * @param user - имя поьзователя
+     * @param pass - пароль
+     * @return true, если соединение удалось установить
+     * false, если это не удалось по какой-либо причине
+     */
     public boolean DBConnect(String address,int port,String DBNAme, String user, String pass) {
         try
         {
@@ -154,6 +216,10 @@ public class SQL implements DBInterface {
         }
         return false;
     }
+    
+    /**
+     * Метод разрывает соединение с сервером БД, если оно существует
+     */
     public void CloseConn()
     {
         try

@@ -21,13 +21,20 @@ import java.util.Scanner;
 
 /**
  * Created by Suharev on 20.03.2016.
- * Updated on 9.05.2016.
+ * Класс, работающий с API социальных сетей vkontakte и Facebook
+ * Конкретно - запршивает оттуда данные о людях, опираясь на полученне ссылки
+ * Содержит о одному методу для работы с каждо из соц. сетей
+ * И два доп. метода для работы с vk (проверяют результаты)
  */
 
 public class GetSomePrivateData {
 
-    static Scanner in = new Scanner(System.in);
-    //Эти 2 метода проверяют заполнено ли нужное нам поле у пользователя вк, дабы не нарваться на NullPntrExc в ходе работы
+    /**
+     * Метод проверяет заполнено ли нужное нам поле у пользователя вк, дабы не нарваться на NullPntrExc в ходе работы
+     * @param user Объект класса JsonElement, который проверяем
+     * @param fname - имя поля внутри объекта, которое надо проверить
+     * @return строковое значение объекта JsonElement или null, если оно пустое
+     */
     public String vkcheckfield(JsonElement user,String fname)
     {
         String field=null;
@@ -40,8 +47,14 @@ public class GetSomePrivateData {
         }
         return field;
     }
-    //Этот метод отличается только тем, что проверяет объекты внутри объекта Json
-    public String vkcheckfield(JsonElement user,String fname,String subname)
+    
+    /**
+     * Метод проверяет заполнено ли нужное нам поле у пользователя вк, дабы не нарваться на NullPntrExc в ходе работы
+     * Этот вариант должен принимать объект JSON с подполями
+     * @param user Объект класса JsonElement, который проверяем
+     * @param fname - имя поля внутри объекта, которое надо проверить
+     * @param subname - имя подполя, которое надо проверить
+     * @return строковое значение объекта JsonElement или null, если оно пустое*/    public String vkcheckfield(JsonElement user,String fname,String subname)
     {
         String field;
         try{
@@ -57,8 +70,12 @@ public class GetSomePrivateData {
         return field;
     }
 
-    //links - массив идентификаторов пользователя, которые хотим отправить, setts-массив с настройками
-    public ArrayList<PersonInfo> vkGet(ArrayList<String> links)
+    /**
+     * Метод принимает ArrayList ссылок, отправляет их по одному в API сервиса и полуает в ответ данные о
+     * людях, которые преобразовывает из JSON в результирующий массив объектов PersonInfo
+     * @param links - массив идентификаторов пользователя, данные о которых надо получить
+     * @return Массив объектов PersonInfo
+     */    public ArrayList<PersonInfo> vkGet(ArrayList<String> links)
     {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
         byte[] setts = giveMeSettings.getSocialStg();
@@ -139,6 +156,12 @@ public class GetSomePrivateData {
         return results;
     }
 
+    /**
+     * Метод принимает ArrayList ссылок, отправляет их по одному в API сервиса и полуает в ответ данные о
+     * людях, которые выводит на экран (пока что)
+     * @param links - массив идентификаторов пользователя, данные о которых надо получить
+     * @return 0 в случае успеха
+     */
     public int fbGet(ArrayList<String> links)
     {
         byte cnt=0;
