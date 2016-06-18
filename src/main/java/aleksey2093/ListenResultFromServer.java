@@ -22,30 +22,34 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Optional;
 
-//import javax.swing.*;
-
-
+/**
+ * Класс постоянно прослушивает сообщения с сервера, что поймать сообщение о входящем результате подписчика.
+ */
 public class ListenResultFromServer {
-    /*
-    Класс постоянно прослушивает сообщения с сервера, чтобы поймать сообщение о входящем результате подписчика.
+    /**
+     * Статическая переменная потока в котором работают методы текущего класса
      */
     private static Thread thread;
-
+    /**
+     * Указатель на mainFormController для обновления информации в списке подписок основного окна
+     */
     private MainFormController mainFormController;
 
-    public void startListenThread(MainFormController mainFormController2) {
-        mainFormController = mainFormController2;
-        thread = new Thread(new Runnable() {
-            public void run() {
-                int err = 0;
-                while (true) {
-                    listenServer();
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception ex) {
-                        err++;
-                        System.out.println("Ошибка прослушки " + err + ": " + ex.getMessage());
-                    }
+    /**
+     * Запуск методов класса в отдельном потоке
+     * @param mainFormController указатель на класс основного окна
+     */
+    public void startListenThread(MainFormController mainFormController) {
+        this.mainFormController = mainFormController;
+        thread = new Thread(() -> {
+            int err = 0;
+            while (true) {
+                listenServer();
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ex) {
+                    err++;
+                    System.out.println("Ошибка прослушки " + err + ": " + ex.getMessage());
                 }
             }
         });
@@ -53,10 +57,17 @@ public class ListenResultFromServer {
         thread.start();
         thread.isInterrupted();
     }
+
+    /**
+     * Остановка потока текущего класса
+     */
     public void stopListenThread() {
         thread.stop();
     }
 
+    /**
+     * Ожидание входящих подключений
+     */
     private void listenServer() {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
         ServerSocket serversocket = getServerSocket(giveMeSettings);
@@ -78,6 +89,11 @@ public class ListenResultFromServer {
         }
     }
 
+    /**
+     * Создание сокета типа сервер для ожидания входящих подключений
+     * @param giveMeSettings указатель на класс настроек
+     * @return сокет
+     */
     /*получение нового сокета для входящих соединенний*/
     private ServerSocket getServerSocket(GiveMeSettings giveMeSettings) {
         int err = 0;
@@ -107,8 +123,11 @@ public class ListenResultFromServer {
         }
     }
 
-    /*метод обработки нового соединения*/
-    private boolean startSocketNewAccept(Socket socket) {
+    /**
+     * Получение входящего сообщения
+     * @param socket указатель на сокет
+     */
+    private void startSocketNewAccept(Socket socket) {
         try {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             int len = 0, err = 0;
@@ -118,55 +137,65 @@ public class ListenResultFromServer {
                 len = inputStream.read(msg);
                 err++;
                 if (err > 100000)
-                    return false;
+                    return;
+                Thread.sleep(500);
             }
             msgPostsProcessing(msg, len);
-            return true;
         } catch (Exception ex) {
-            return false;
+            System.out.println("Ошибка в классе прослушки в методке startSocketNewAccept: " + ex.toString());
         }
     }
 
-    private boolean getResDialogWindow(final int what, final String login, final byte[] msg, final int len) {
-        Platform.runLater(new Runnable() {
-            public void run() {
-                if (what == 1) {
-                    System.out.println("Посмотреть результат пользователя - " + login + "? (yes/no)");
-                    final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Пришел результат");
-                    alert.setHeaderText("У пользователя " + login + " новый результат");
-                    alert.setContentText("Хотите посмотреть на результат '" + login + "'?");
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == ButtonType.OK) {
-                        System.out.println("Пользователь согласился посмотреть результат от " + login);
-                        formationListLinks(msg,len,login);
-                    } //else
-                        //return false;
-                } else if (what == 2) {
-                    System.out.println("Результат пользователя пуст");
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Информация");
-                    alert.setHeaderText("");
-                    alert.setContentText("Результат " + login + " пуст");
-                    alert.showAndWait();
-                    //return true;
-                } else if (what == 3) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Информация");
-                    alert.setHeaderText("Ошибка входа");
-                    alert.setContentText("Неправильный логин или пароль");
-                    alert.showAndWait();
-                    //return true;
-                }
+    /**
+     * Вызов диалоговых окно
+     * @param what номер диалогового окна
+     * @param login имя подписчика
+     * @param msg входящее сообщения с сервера
+     * @param len длинна сообщения
+     */
+    private void getResDialogWindow(final int what, final String login, final byte[] msg, final int len) {
+        Platform.runLater(() -> {
+            if (what == 1) {
+                System.out.println("Посмотреть результат пользователя - " + login + "? (yes/no)");
+                final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Пришел результат");
+                alert.setHeaderText("У пользователя " + login + " новый результат");
+                alert.setContentText("Хотите посмотреть на результат '" + login + "'?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    System.out.println("Пользователь согласился посмотреть результат от " + login);
+                    formationListLinks(msg,len,login);
+                } //else
+                //return false;
+            } else if (what == 2) {
+                System.out.println("Результат пользователя пуст");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Информация");
+                alert.setHeaderText("");
+                alert.setContentText("Результат " + login + " пуст");
+                alert.showAndWait();
+                //return true;
+            } else if (what == 3) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Информация");
+                alert.setHeaderText("Ошибка входа");
+                alert.setContentText("Неправильный логин или пароль");
+                alert.showAndWait();
+                //return true;
             }
         });
-        return true;
     }
+
+    /**
+     * Обработка входящего сообщения. Проверка на ошибки и передача на извлечение массива ссылок
+     * @param msg входящее сообщние
+     * @param len длинна сообщения
+     */
     private void msgPostsProcessing(byte[] msg, int len)
     {
         //дешифруем
         if (msg[1] == (byte)102) {
-            System.out.println("Неправильный логин или пароль. Тип: " + msg[1]);
+            System.out.println("Ошибка в сообщении. Тип: " + msg[1]);
             getResDialogWindow(3,null,null,-1);
         } else if (msg[1] != 2) {
             System.out.println("Получили левое сообщение. Продолжаем прослушку.");
@@ -188,7 +217,13 @@ public class ListenResultFromServer {
         }
     }
 
-    private void formationListLinks(byte[] msg, int len, String login) {
+    /**
+     * Формирование списка ссылок
+     * @param msg входящее сообщение
+     * @param len длинна сообщения
+     * @param friend имя подписчика
+     */
+    private void formationListLinks(byte[] msg, int len, String friend) {
         //Мы получили от пользователя разрешение посмотреть на результат запрос от пользователя
         int jb = 3 + msg[2];
                 /*и так мы получили список ссылок в виде (4 байта длинна, ссылка, 4 байта длинна, ссылка....).
@@ -197,13 +232,12 @@ public class ListenResultFromServer {
             getResDialogWindow(2,null,null,-1);
             return;
         }
-        ArrayList<String> links = new ArrayList<String>();
+        ArrayList<String> links = new ArrayList<>();
         while (jb < len) {
             int size = ByteBuffer.wrap(msg, jb, 4).getInt();
             jb += 4;
             try {
-                String link = null;
-                link = new String(msg, jb, size, "UTF-8");
+                String link = new String(msg, jb, size, "UTF-8");
                 link = getIdFromLink(link);
                 if (link != null && link.length() != 0)
                     links.add(link);
@@ -212,14 +246,16 @@ public class ListenResultFromServer {
             }
             jb += size;
         }
-        for (int i = 0; i < links.toArray().length; i++) {
-            System.out.println("Ссылка по запросу пользователя (" + login + "): " + links.get(i));
-        }
         GetSomePrivateData getSomePrivateData = new GetSomePrivateData();
-        showWindowResult(getSomePrivateData.vkGet(links),login);
+        showWindowResult(getSomePrivateData.vkGet(links),friend);
     }
 
-    private boolean showWindowResult(final ArrayList<PersonInfo> list, final String login) {
+    /**
+     * Вызов окна с результатом подписчика
+     * @param list Данные из соц. сетей по результату
+     * @param friend имя подписчика
+     */
+    private void showWindowResult(final ArrayList<PersonInfo> list, final String friend) {
         Platform.runLater(new Runnable() {
             public void run() {
                 Stage stage = new Stage();
@@ -227,24 +263,26 @@ public class ListenResultFromServer {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("resultsForm.fxml"));
                     root = loader.load();
-                    ResultsFormController resultsFormController = loader.<ResultsFormController>getController();
+                    ResultsFormController resultsFormController = loader.getController();
                     resultsFormController.setParametr(list);
                     resultsFormController.getScrollPaneResult();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (URISyntaxException e) {
+                } catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
                 }
+                assert root != null;
                 Scene scene = new Scene(root, 600, 790);
-                stage.setTitle("Результаты поиска для подписки на " + login);
+                stage.setTitle("Результаты поиска для подписки на " + friend);
                 stage.setScene(scene);
                 stage.show();
             }
         });
-        return true;
     }
 
-    //вырезать ид из ссылки
+    /**
+     * Извлечение id пользователя из ссылки
+     * @param link ссылка
+     * @return id пользователя
+     */
     private String getIdFromLink(String link) {
         String tmp = "";
         if (link.toCharArray()[link.length() - 1] == '/')
