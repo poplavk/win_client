@@ -16,12 +16,12 @@ public class RequestFriendList {
     private ArrayList<String> listfrends = new ArrayList<>();
 
 
-    public ArrayList getListFriends() {
+    public ArrayList<String> getListFriends() {
         boolean res = downloadListFriends();
         if (res) {
             return listfrends;
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 
