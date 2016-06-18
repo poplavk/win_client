@@ -77,42 +77,26 @@ public class GiveMeSettings {
         }
     }
 
-    /**
-     * Настройки социальных сетей для подсистемы загрузки данных из социальных сетей
-     * @return массив настроек
-     */
-    public int[] getSocialStg() {
-        int[] res = new int[9];
-        Properties props = loadSettingFile();
-        try {
-            boolean[] tmp = getSocialSettings();
-            for (int i=0;i<7;i++)
-                res[i] = tmp[i] ? 1 : 0;
-            res[7] = Boolean.parseBoolean(props.getProperty("social.del")) ? 1 : 0;
-            res[8] = Integer.parseInt(props.getProperty("social.close"));
-        } catch (Exception ex) {
-            res = new int[1];
-            res[0] = -1;
-            ex.printStackTrace();
-        }
-        return res;
-    }
 
     /**
-     * Возвращает массив настроек социальных сетей для окна настроек
+     * Возвращает массив настроек социальных сетей
      * @return массив настроек
      */
-    public boolean[] getSocialSettings()
-    {
+    public boolean[] getSocialSettings() {
         boolean[] res = new boolean[7];
-        Properties props = loadSettingFile();
-        res[0] = Boolean.parseBoolean(props.getProperty("socialnetwork"));
-        res[1] = Boolean.parseBoolean(props.getProperty("social.photo"));
-        res[2] = Boolean.parseBoolean(props.getProperty("social.fio"));
-        res[3] = Boolean.parseBoolean(props.getProperty("social.datebith"));
-        res[4] = Boolean.parseBoolean(props.getProperty("social.city"));
-        res[5] = Boolean.parseBoolean(props.getProperty("social.work"));
-        res[6] = Boolean.parseBoolean(props.getProperty("social.phone"));
+        try {
+            Properties props = loadSettingFile();
+            res[0] = Boolean.parseBoolean(props.getProperty("socialnetwork"));
+            res[1] = Boolean.parseBoolean(props.getProperty("social.photo"));
+            res[2] = Boolean.parseBoolean(props.getProperty("social.fio"));
+            res[3] = Boolean.parseBoolean(props.getProperty("social.datebith"));
+            res[4] = Boolean.parseBoolean(props.getProperty("social.city"));
+            res[5] = Boolean.parseBoolean(props.getProperty("social.work"));
+            res[6] = Boolean.parseBoolean(props.getProperty("social.phone"));
+        } catch (Exception ex) {
+            res = new boolean[1];
+            res[0] = false;
+        }
         return res;
     }
 
