@@ -5,12 +5,16 @@ import java.lang.String;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class GiveMeSettings {
 
-    //загружает файл настроек
-    public Properties loadSettingFile() {
+    /**
+     * Загружает параметры из файла настроек
+     * @return параметры файла настроек
+     */
+    private Properties loadSettingFile() {
         FileInputStream fis;
         Properties property = new Properties();
         try {
@@ -23,53 +27,25 @@ public class GiveMeSettings {
         }
         return property;
     }
-    //фильтр и количество.
-    public byte[] getFilter(byte bit) {
-        if (bit == 1) {
-            byte[] mass;
-            Properties props = loadSettingFile();
-            if (props == null) {
-                mass = new byte[1];
-                mass[0] = -1;
-                return mass;
-            }
-            mass = new byte[2];
-            mass[0] = Byte.parseByte(props.getProperty("filter"));
-            mass[1] = Byte.parseByte(props.getProperty("count"));
-            return mass;
-        }
-        byte[] mass = new byte[1];
-        mass[0] = -1;
+
+    /**
+     * Возвращает значения фильтров качества и количества
+     * @return массив из двух переменных
+     */
+    public int[] getFilter() {
+        Properties props = loadSettingFile();
+        int[] mass = new int[2];
+        mass[0] = Boolean.parseBoolean(props.getProperty("filter")) ? 1 : 0;
+        mass[1] = Integer.parseInt(props.getProperty("count"));
         return mass;
     }
-    //не использовать!
-    public Socket getSocket(int what) {
-        Socket socket;
-        String serverName;
-        int serverPort;
-        serverName = getServerName(what);
-        serverPort = getServerPort(what);
-        int err = 0;
-        while (true) {
-            try {
-                socket = new Socket(serverName, serverPort);
-                return socket;
-            } catch (Exception ex) {
-                System.out.println("Не удается подключиться");
-                err++;
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (err > 9) {
-                    System.out.println("Закончились попытки подключения");
-                    return null;
-                }
-            }
-        }
-    }
-    //1 - эталон, 2 - подписки, 3 - прослушка
+
+
+    /**
+     * Возвращает имя сервера
+     * @param what 1 - эталон, 2 - подписки, 3 - прослушка
+     * @return имя Сервера
+     */
     public String getServerName(int what) {
         switch (what) {
             case 1:
@@ -82,7 +58,12 @@ public class GiveMeSettings {
                 return null;
         }
     }
-    //1 - эталон, 2 - подписки, 3 - прослушка
+
+    /**
+     * Возвращает номер порта сервера
+     * @param what 1 - эталон, 2 - подписки, 3 - прослушка
+     * @return порт
+     */
     public int getServerPort(int what) {
         switch (what) {
             case 1:
@@ -95,44 +76,72 @@ public class GiveMeSettings {
                 return -1;
         }
     }
-    
-    public byte[] getSocialStg() {
-        byte[] res = new byte[9];
+
+    /**
+     * Настройки социальных сетей для подсистемы загрузки данных из социальных сетей
+     * @return массив настроек
+     */
+    public int[] getSocialStg() {
+        int[] res = new int[9];
         Properties props = loadSettingFile();
         try {
-            res[0] = Byte.parseByte(props.getProperty("socialnetwork"));
-            res[1] = Byte.parseByte(props.getProperty("social.photo"));
-            res[2] = Byte.parseByte(props.getProperty("social.fio"));
-            res[3] = Byte.parseByte(props.getProperty("social.datebith"));
-            res[4] = Byte.parseByte(props.getProperty("social.city"));
-            res[5] = Byte.parseByte(props.getProperty("social.work"));
-            res[6] = Byte.parseByte(props.getProperty("social.phone"));
-            res[7] = Byte.parseByte(props.getProperty("social.del"));
-            res[8] = Byte.parseByte(props.getProperty("social.close"));
+            boolean[] tmp = getSocialSettings();
+            for (int i=0;i<7;i++)
+                res[i] = tmp[i] ? 1 : 0;
+            res[7] = Boolean.parseBoolean(props.getProperty("social.del")) ? 1 : 0;
+            res[8] = Integer.parseInt(props.getProperty("social.close"));
         } catch (Exception ex) {
-            res = new byte[1];
+            res = new int[1];
             res[0] = -1;
             ex.printStackTrace();
         }
         return res;
     }
-    //сохранение настроек
+
+    /**
+     * Возвращает массив настроек социальных сетей для окна настроек
+     * @return массив настроек
+     */
+    public boolean[] getSocialSettings()
+    {
+        boolean[] res = new boolean[7];
+        Properties props = loadSettingFile();
+        res[0] = Boolean.parseBoolean(props.getProperty("socialnetwork"));
+        res[1] = Boolean.parseBoolean(props.getProperty("social.photo"));
+        res[2] = Boolean.parseBoolean(props.getProperty("social.fio"));
+        res[3] = Boolean.parseBoolean(props.getProperty("social.datebith"));
+        res[4] = Boolean.parseBoolean(props.getProperty("social.city"));
+        res[5] = Boolean.parseBoolean(props.getProperty("social.work"));
+        res[6] = Boolean.parseBoolean(props.getProperty("social.phone"));
+        return res;
+    }
+
+    /**
+     * Сохранение пользовательских настроек
+     * @param tmp массив настроек соц. сетей
+     * @param encr Тип шифрования
+     * @return успешность выполнения операции сохранения
+     */
     public boolean setSaveSettingWindow(boolean[] tmp, String encr) {
         Properties properties = loadSettingFile();
-        properties.setProperty("socialnetwork", (tmp[0] ? "0" : "1"));
-        if (encr.equals("AES")) {
-            properties.setProperty("encryption", "1");
-        } else if (encr.equals("RSA")) {
-            properties.setProperty("encryption", "2");
-        } else if (encr.equals("ГОСТ")) {
-            properties.setProperty("encryption", "3");
+        properties.setProperty("socialnetwork", (tmp[0] + ""));
+        switch (encr) {
+            case "AES":
+                properties.setProperty("encryption", "1");
+                break;
+            case "RSA":
+                properties.setProperty("encryption", "2");
+                break;
+            case "ГОСТ":
+                properties.setProperty("encryption", "3");
+                break;
         }
-        properties.setProperty("social.photo", (tmp[1] ? "1" : "0"));
-        properties.setProperty("social.fio", (tmp[2] ? "1" : "0"));
-        properties.setProperty("social.datebith", (tmp[3] ? "1" : "0"));
-        properties.setProperty("social.city", (tmp[4] ? "1" : "0"));
-        properties.setProperty("social.work", (tmp[5] ? "1" : "0"));
-        properties.setProperty("social.phone", (tmp[6] ? "1" : "0"));
+        properties.setProperty("social.photo", (tmp[1]+""));
+        properties.setProperty("social.fio", (tmp[2]+""));
+        properties.setProperty("social.datebith", (tmp[3]+""));
+        properties.setProperty("social.city", (tmp[4]+""));
+        properties.setProperty("social.work", (tmp[5]+""));
+        properties.setProperty("social.phone", (tmp[6]+""));
         try {
             properties.store(new FileOutputStream("src/main/resources/settingfile.properties"), null);
             return true;
@@ -142,6 +151,11 @@ public class GiveMeSettings {
         }
     }
 
+    /**
+     * Возвращает логин пользователя или пароль
+     * @param b логин (true), пароль (false)
+     * @return логин/пароль
+     */
     public String getLpkString(boolean b) {
         if (b) {
             return loadSettingFile().getProperty("sys.login");
@@ -150,6 +164,11 @@ public class GiveMeSettings {
         }
     }
 
+    /**
+     * Сохраняет логин пользователя или пароль
+     * @param b логин (true), пароль (false)
+     * @param string Сохраняемое значение
+     */
     public void setLpkString(boolean b, String string) {
         Properties properties = loadSettingFile();
         if (b) {
@@ -164,11 +183,15 @@ public class GiveMeSettings {
         }
     }
 
-    //логин пользователя и пароль. true - логин, false - пароль
+    /**
+     * Возвращает логин пользователя или пароль в виде массива байт
+     * @param bit логин (true), пароль (false)
+     * @return массив байт
+     */
     public byte[] getLpk(boolean bit) {
         byte[] mass = new byte[1];
         mass[0] = -1;
-        String str = "";
+        String str;
         if (bit)
             str = loadSettingFile().getProperty("sys.login");
         else
@@ -177,30 +200,13 @@ public class GiveMeSettings {
             mass[0] = -1;
         else
             mass = str.getBytes();
-        /*if (bit > 0 && bit < 4)//логин
-        {
-            String str = null;
-            int key;
-            if (bit == 3 && (key = Integer.parseInt(loadSettingFile().getProperty("sys.key"))) > -1) {
-                mass = java.nio.ByteBuffer.allocate(4).putInt(key).array();
-            } else {
-                if (bit == 1) str = loadSettingFile().getProperty("sys.login");
-                else if (bit == 2) str = loadSettingFile().getProperty("sys.pass");
-                if (!str.equals("-1") && str != null) {
-                    mass = new byte[str.length()];
-                    for (int i = 0; i < str.length(); i++) {
-                        mass[i] = (byte) str.toCharArray()[i];
-                    }
-                }
-            }
-        } else {
-            mass[0] = -2;
-            return mass;
-        }*/
         return mass;
     }
-    
-    //тип шифрования
+
+    /**
+     * Возвращает тип шифрования
+     * @return тип шифрования
+     */
     public byte getEncryption() {
         try {
             return Byte.parseByte(loadSettingFile().getProperty("encryption"));
