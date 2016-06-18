@@ -18,42 +18,41 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
- * Created by aleks on 10.04.2016.
+ * Класс загрузки последнего результата пользователя
  */
 public class GetFriendsLastResult {
 
+    /**
+     * Загрузка последнего результата подписчика в отдельном потока
+     * @param friend имя подписчика
+     */
     public void getLastResultThread(final String friend)
     {
-        new Thread(new Runnable() {
-            public void run() {
-                getLastResult(friend);
-            }
+        new Thread(() -> {
+            getLastResult(friend);
         }).start();
     }
-    //при выборе подписчика в списке возвращает ArrayList<String> содержащий id для передачи в подсистемы загрузки данных 
+
+    /**
+     * Загрузка последнего результата подписчика
+     * @param friend имя подписчика
+     */
     private void getLastResult(String friend) {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
-        Socket socket = null;
-        DataOutputStream outputStream;
-        DataInputStream inputStream;
-        try {
-            socket = new Socket(giveMeSettings.getServerName(2), giveMeSettings.getServerPort(2));
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
-        } catch (IOException e) {
-                /* выключаем сокет прослушки, если он мешает (использует необходимый порт) */
-            e.printStackTrace();
+        Socket socket = getSocket(giveMeSettings);
+        if (socket == null)
             return;
-        }
-        if (sendRequestToServer(giveMeSettings, outputStream, friend)) {
-            waitServerMsg(inputStream, friend);
+        try {
+            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+            if (sendRequestToServer(giveMeSettings, outputStream, friend)) {
+                waitServerMsg(inputStream, friend);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         if (!socket.isClosed())
             try {
@@ -63,6 +62,30 @@ public class GetFriendsLastResult {
             }
     }
 
+    /**
+     * Подклечения сокета сервера подписок
+     * @param giveMeSettings указатель на класс настроек
+     * @return сокет сервера подписок
+     */
+    private Socket getSocket(GiveMeSettings giveMeSettings) {
+        int err = 0;
+        while (err < 3)
+            try {
+                return new Socket(giveMeSettings.getServerName(2), giveMeSettings.getServerPort(2));
+            } catch (IOException e) {
+                e.printStackTrace();
+                err++;
+            }
+        return null;
+    }
+
+    /**
+     * Отправка запроса на сервер
+     * @param giveMeSettings указатель на класс настроек
+     * @param outputStream указатель на выходной поток
+     * @param friend имя подписчика
+     * @return true в случае успеха, false - неудачи
+     */
     private boolean sendRequestToServer(GiveMeSettings giveMeSettings, DataOutputStream outputStream, String friend) {
         try {
             byte[] login = giveMeSettings.getLpk(true);
@@ -90,6 +113,11 @@ public class GetFriendsLastResult {
         return true;
     }
 
+    /**
+     * Ожидание ответа от сервера
+     * @param inputStream входной поток
+     * @param friend имя подписчика
+     */
     private void waitServerMsg(DataInputStream inputStream, String friend) {
         byte[] msg = new byte[1];
         int len = 0;
@@ -104,42 +132,59 @@ public class GetFriendsLastResult {
         }
         //дешифруем полученное сообщение
         if (msg[1] == (byte) 103) {
-            showDialogInform(true, null);
+            showDialogInform(1, null);
             return;
         } else if (msg[1] != 3) {
             return;
         } else if (len <= 3) {
-            showDialogInform(false, friend);
+            showDialogInform(2, friend);
             return;
         }
         formationListLinks(msg, len, friend);
     }
 
+    /**
+     * Формирование результата и вывод на экран. Возможно необходимо для подсистемы отправки эталона.
+     * @param msg байт массив с сервера
+     * @param len длинна массива
+     * @param login имя текущего пользователя
+     */
     public void resultSendPhoto(byte[] msg, int len, String login) {
         formationListLinks(msg,len,login);
     }
 
+    /**
+     * Фомирование результата и вывод на экран.
+     * @param msg байт массив с сервера
+     * @param len длинна массива
+     * @param friend имя подписчика
+     */
     private void formationListLinks(byte[] msg, int len, String friend) {
-        ArrayList<String> arrayList = new ArrayList<String>();
+        ArrayList<String> arrayList = new ArrayList<>();
         int i = 2;
         while (i < len) {
-            int lenlink = ByteBuffer.wrap(msg, i, 4).getInt();
+            int len_link = ByteBuffer.wrap(msg, i, 4).getInt();
             i += 4;
             try {
-                String link = new String(msg, i, lenlink, "UTF-8");
+                String link = new String(msg, i, len_link, "UTF-8");
                 link = getIdFromLink(link);
                 if (link != null && link.length() != 0)
                     arrayList.add(link);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            i += lenlink;
+            i += len_link;
         }
         GetSomePrivateData getSomePrivateData = new GetSomePrivateData();
         showWindowResult(getSomePrivateData.vkGet(arrayList),friend);
     }
 
-    private boolean showWindowResult(final ArrayList<PersonInfo> list, final String login) {
+    /**
+     * Отображение окна результата
+     * @param list Данные по результату из социальной сети
+     * @param friend имя подписчика
+     */
+    private void showWindowResult(final ArrayList<PersonInfo> list, final String friend) {
         Platform.runLater(new Runnable() {
             public void run() {
                 Stage stage = new Stage();
@@ -147,7 +192,7 @@ public class GetFriendsLastResult {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("resultsForm.fxml"));
                     root = loader.load();
-                    ResultsFormController resultsFormController = loader.<ResultsFormController>getController();
+                    ResultsFormController resultsFormController = loader.getController();
                     resultsFormController.setParametr(list);
                     try {
                         resultsFormController.getScrollPaneResult();
@@ -157,17 +202,22 @@ public class GetFriendsLastResult {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                assert root != null;
                 Scene scene = new Scene(root, 600, 790);
-                stage.setTitle("Результаты поиска для подписки на " + login);
+                stage.setTitle("Результаты поиска для подписки на " + friend);
                 stage.setScene(scene);
 //                stage.setResizable(false);
                 stage.getIcons().add(new Image("icon.png"));
                 stage.show();
             }
         });
-        return true;
     }
 
+    /**
+     * Получение id пользователя из ссылки
+     * @param link ссылка
+     * @return id пользователя
+     */
     private String getIdFromLink(String link) {
         String tmp = "";
         if (link.toCharArray()[link.length() - 1] == '/')
@@ -180,23 +230,31 @@ public class GetFriendsLastResult {
         return tmp;
     }
 
-    private void showDialogInform(final boolean what, final String string) {
-        Platform.runLater(new Runnable() {
-            public void run() {
+    /**
+     * Отображение диалогового окна с информцией
+     * @param what номер диалового окна
+     * @param friend имя подписчика (необязательно, можно оставить пустым)
+     */
+    private void showDialogInform(final int what, final String friend) {
+        Platform.runLater(() -> {
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Информация");
-        if (what) {
-            System.out.println("Неправильный логин или пароль.");
-            alert.setHeaderText("Ошибка входа");
-            alert.setContentText("Неправильный логин или пароль");
-        } else {
-            System.out.println("Последний результат " + string + "пуст");
-            alert.setHeaderText("Пустой результат");
-            alert.setContentText("Результат " + string + " оказался пуст");
-        }
-        alert.showAndWait();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Информация");
+            if (what == 1) {
+                System.out.println("Неправильный логин или пароль.");
+                alert.setHeaderText("Ошибка входа");
+                alert.setContentText("Неправильный логин или пароль.");
+            } else if (what == 2) {
+                System.out.println("Последний результат " + friend + "пуст.");
+                alert.setHeaderText("Пустой результат");
+                alert.setContentText("Результат " + friend + " оказался пуст.");
+            } else if (what == 3) {
+                System.out.println("Ошибка при подключении к серверу. Метод загрузки последнего результата.");
+                alert.setHeaderText("Ошибка подключения");
+                alert.setContentText("Ошибка при подключении к серверу. Проверьте свое подключение к интернету и " +
+                        "повторите попытку.");
             }
+            alert.showAndWait();
         });
     }
 }
