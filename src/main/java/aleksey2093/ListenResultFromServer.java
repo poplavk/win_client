@@ -4,6 +4,7 @@ import gui.MainFormController;
 import gui.ResultsFormController;
 import hackIntoSN.GetSomePrivateData;
 import hackIntoSN.PersonInfo;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -84,7 +85,7 @@ public class ListenResultFromServer {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                startSocketNewAccept(socket);
+                startSocketNewAccept(giveMeSettings, socket);
             } catch (IOException e) {
                 e.printStackTrace();
                 try {
@@ -132,9 +133,10 @@ public class ListenResultFromServer {
 
     /**
      * Получение входящего сообщения
+     * @param giveMeSettings указатель на класс настроек
      * @param socket указатель на сокет
      */
-    private void startSocketNewAccept(Socket socket) {
+    private void startSocketNewAccept(GiveMeSettings giveMeSettings, Socket socket) {
         try {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             int len = 0, err = 0;
@@ -147,7 +149,7 @@ public class ListenResultFromServer {
                     return;
                 Thread.sleep(500);
             }
-            msgPostsProcessing(msg, len);
+            msgPostsProcessing(giveMeSettings, msg, len);
         } catch (Exception ex) {
             System.out.println("Ошибка в классе прослушки в методке startSocketNewAccept: " + ex.toString());
         }
@@ -195,23 +197,27 @@ public class ListenResultFromServer {
 
     /**
      * Обработка входящего сообщения. Проверка на ошибки и передача на извлечение массива ссылок
+     * @param giveMeSettings указатель на файл настроек
      * @param msg входящее сообщние
      * @param len длинна сообщения
      */
-    private void msgPostsProcessing(byte[] msg, int len)
+    private void msgPostsProcessing(GiveMeSettings giveMeSettings,byte[] msg, int len)
     {
-        //дешифруем
-        if (msg[1] == (byte)102) {
-            System.out.println("Ошибка в сообщении. Тип: " + msg[1]);
+        msg = giveMeSettings.getDecryptMsg(msg); //дешифруем
+        if (msg[0] == (byte)-1) {
+            System.out.println("Сообщение дешифровано неверно");
+        }
+        else if (msg[1] == (byte)102) {
+            System.out.println("Ошибка в сообщении. Тип: " + msg[0]);
             getResDialogWindow(3,null,null,-1);
-        } else if (msg[1] != 2) {
+        } else if (msg[1] != (byte) 2) {
             System.out.println("Получили левое сообщение. Продолжаем прослушку.");
-        } else if (msg[2] < 1) {
+        } else if (msg[1] < (byte) 1) {
             System.out.println("Сообщение неверно дешефровано или отправлено. " +
                     "Длинна логина указана как отрицательная. Продолжаем прослушку.");
         } else {
             try {
-                String login = new String(msg, 3, msg[2], "UTF-8");
+                String login = new String(msg, 2, msg[1], "UTF-8");
                 /*if (!getResDialogWindow(1,login))
                     return;
                 //formationListLinks(msg,len,login);*/
