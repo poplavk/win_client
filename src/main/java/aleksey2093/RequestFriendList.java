@@ -19,8 +19,10 @@ public class RequestFriendList {
     public ArrayList<String> getListFriends() {
         boolean res = downloadListFriends();
         if (res) {
+            System.out.println("Подписки получены и сейчас будут выведены на экран");
             return listfrends;
         } else {
+            System.out.println("Подписки не получены");
             return new ArrayList<>();
         }
     }
@@ -52,7 +54,10 @@ public class RequestFriendList {
                 len = inputStream.read(msg);
             }
             //дешифруем
-            if (msg[1] == (byte) 101) {
+            msg = giveMeSettings.getDecryptMsg(msg);
+            if (msg[0] == (byte)-1) {
+                return false;
+            } else if (msg[1] == (byte) 101) {
                 showDialogInformation();
                 return false;
             } else if (msg[1] != (byte) 1) {
@@ -75,23 +80,23 @@ public class RequestFriendList {
             System.out.println("Метод подписок: Подписчиков нет");
             return false;
         }
-        ArrayList<String> stringArrayList = new ArrayList<String>();
+        ArrayList<String> stringArrayList = new ArrayList<>();
         while (j < len) {
             /* ключ пока нигде не используется, поэтому просто будем собирать, но не хранить
             * как вариант можно выводить его в списке подписок и по клику отправлять его
             * на сервер, а не строковый логин */
             int key = java.nio.ByteBuffer.wrap(msg, j, 4).getInt();
             j += 4;
-            int lenlogin = msg[j];
+            int len_login = msg[j];
             j++;
             try {
-                String tess = new String(msg, j, lenlogin, "UTF-8");
+                String tess = new String(msg, j, len_login, "UTF-8");
                 stringArrayList.add(tess);
             } catch (UnsupportedEncodingException e) {
                 System.out.println("Ошибка обработки имени подписчика в методе загрузки подписок");
                 e.printStackTrace();
             }
-            j += lenlogin;
+            j += len_login;
         }
         listfrends = stringArrayList;
         return listfrends.size() != 0;
@@ -122,6 +127,7 @@ public class RequestFriendList {
             return false;
         }
         try {
+            message_byte = giveMeSettings.getEncryptMsg(message_byte);
             outputStream.write(message_byte);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -1,5 +1,8 @@
 package aleksey2093;
 
+import encrypt.AES;
+import encrypt.MD5;
+import encrypt.RSA;
 import gui.ResultsFormController;
 import hackIntoSN.GetSomePrivateData;
 import hackIntoSN.PersonInfo;
@@ -19,6 +22,7 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Класс загрузки последнего результата пользователя
@@ -49,7 +53,7 @@ public class GetFriendsLastResult {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             if (sendRequestToServer(giveMeSettings, outputStream, friend)) {
-                waitServerMsg(inputStream, friend);
+                waitServerMsg(giveMeSettings,inputStream, friend);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,6 +109,7 @@ public class GetFriendsLastResult {
             msg[j] = (byte)friend.getBytes().length; j++;
             for (int i = 0; i < friend.getBytes().length; i++, j++)
                 msg[j] = friend.getBytes()[i];
+            msg = giveMeSettings.getEncryptMsg(msg);
             outputStream.write(msg);
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,12 +118,14 @@ public class GetFriendsLastResult {
         return true;
     }
 
+
+
     /**
      * Ожидание ответа от сервера
      * @param inputStream входной поток
      * @param friend имя подписчика
      */
-    private void waitServerMsg(DataInputStream inputStream, String friend) {
+    private void waitServerMsg(GiveMeSettings giveMeSettings, DataInputStream inputStream, String friend) {
         byte[] msg = new byte[1];
         int len = 0;
         while (len <= 0) {
@@ -130,8 +137,10 @@ public class GetFriendsLastResult {
                 return;
             }
         }
-        //дешифруем полученное сообщение
-        if (msg[1] == (byte) 103) {
+        msg = giveMeSettings.getDecryptMsg(msg);
+        if (msg[0] == (byte) -1) {
+            return;
+        } else if (msg[1] == (byte) 103) {
             showDialogInform(1, null);
             return;
         } else if (msg[1] != 3) {

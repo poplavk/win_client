@@ -12,12 +12,14 @@ public class RSA implements ICrypto {
         generateKeys();
     }
 
-    public byte[] encrypt(String message) throws Exception {
-        return (new BigInteger(message.getBytes())).modPow(e, n).toByteArray();
+    public byte[] encrypt(byte[] message) throws Exception {
+        return (new BigInteger(message).modPow(e, n).toByteArray());
     }
 
-    public String decrypt(byte[] message) throws Exception {
-        return new String((new BigInteger(message.toString())).modPow(d, n).toByteArray());
+    public byte[] decrypt(byte[] message) throws Exception {
+        //return new String((new BigInteger(message.toString())).modPow(d, n).toByteArray());
+        return new BigInteger(message).modPow(d,n).toByteArray();
+        //return null;
     }
 
     private void generateKeys() {
