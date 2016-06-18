@@ -128,12 +128,12 @@ public class GetSomePrivateData {
                 //Заполняем массив результатов, отталкиваясь от массива настроек
                 for (JsonElement user : pItem) {
                     PersonInfo pi = new PersonInfo();
-                    if(setts[0])pi.image=new Image(vkcheckfield(user,"photo_max_orig"));
-                    if(setts[1]){pi.first_name=vkcheckfield(user,"first_name"); pi.last_name=vkcheckfield(user,"last_name");}
-                    if(setts[2])pi.birthday=vkcheckfield(user,"bdate");
-                    if(setts[3]){pi.country=vkcheckfield(user,"country","title"); pi.city=vkcheckfield(user,"city","title");}
-                    if(setts[4])pi.occupation=vkcheckfield(user,"occupation","name");
-                    if(setts[5])pi.phone=vkcheckfield(user,"contacts","phone");
+                    if(setts[1])pi.image=new Image(vkcheckfield(user,"photo_max_orig"));
+                    if(setts[2]){pi.first_name=vkcheckfield(user,"first_name"); pi.last_name=vkcheckfield(user,"last_name");}
+                    if(setts[3])pi.birthday=vkcheckfield(user,"bdate");
+                    if(setts[4]){pi.country=vkcheckfield(user,"country","title"); pi.city=vkcheckfield(user,"city","title");}
+                    if(setts[5])pi.occupation=vkcheckfield(user,"occupation","name");
+                    if(setts[6])pi.phone=vkcheckfield(user,"contacts","phone");
                     pi.link=links.get(cnt);
                     results.add(pi);
                 }
