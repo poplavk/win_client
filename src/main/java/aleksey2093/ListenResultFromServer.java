@@ -62,25 +62,33 @@ public class ListenResultFromServer {
      * Остановка потока текущего класса
      */
     public void stopListenThread() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        thread.interrupt();
         thread.stop();
     }
+
+    private static ServerSocket serverSocket;
 
     /**
      * Ожидание входящих подключений
      */
     private void listenServer() {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
-        ServerSocket serversocket = getServerSocket(giveMeSettings);
-        if (serversocket == null)
+        serverSocket = getServerSocket(giveMeSettings);
+        if (serverSocket == null)
             return;
         while (true) {
             try {
-                Socket socket = serversocket.accept();
+                Socket socket = serverSocket.accept();
                 startSocketNewAccept(socket);
             } catch (IOException e) {
                 e.printStackTrace();
                 try {
-                    serversocket.close();
+                    serverSocket.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

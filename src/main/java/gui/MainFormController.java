@@ -75,6 +75,10 @@ public class MainFormController {
 //        this.capture = new VideoCapture(0);
     }
 
+//    public void stop() {
+//        new ListenResultFromServer().stopListenThread();
+//    }
+
     public  MainFormController() {
         image = new MyImage();
         gridPane = new GridPane();
@@ -164,6 +168,7 @@ public class MainFormController {
     }
 
     public void handleMenuItemExit(ActionEvent actionEvent) {
+        new ListenResultFromServer().stopListenThread();
         Stage stage = (Stage) menuBarMain.getScene().getWindow();
         stage.close();
     }
