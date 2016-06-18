@@ -1,5 +1,6 @@
 package aleksey2093;
 
+import gui.AlertPry;
 import gui.MainFormController;
 import gui.ResultsFormController;
 import hackIntoSN.GetSomePrivateData;
@@ -11,6 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
@@ -175,11 +179,21 @@ public class ListenResultFromServer {
         Platform.runLater(() -> {
             if (what == 1) {
                 System.out.println("Посмотреть результат пользователя - " + login + "? (yes/no)");
+
                 final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Пришел результат");
+                alert.setTitle("Pry 1.0");
                 alert.setHeaderText("У пользователя " + login + " новый результат");
                 alert.setContentText("Хотите посмотреть на результат '" + login + "'?");
                 Optional<ButtonType> result = alert.showAndWait();
+
+                DialogPane dialogPane = alert.getDialogPane();
+                dialogPane.getStylesheets().add("alert.css");
+
+                alert.setGraphic(new ImageView(new Image("gentleman.png")));
+
+                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(new Image("icon.png"));
+
                 if (result.get() == ButtonType.OK) {
                     System.out.println("Пользователь согласился посмотреть результат от " + login);
                     formationListLinks(msg,len,login);
@@ -187,17 +201,12 @@ public class ListenResultFromServer {
                 //return false;
             } else if (what == 2) {
                 System.out.println("Результат пользователя пуст");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Информация");
-                alert.setHeaderText("");
-                alert.setContentText("Результат " + login + " пуст");
+                AlertPry alert = new AlertPry("", new String("Результат " + login + " пуст"));
                 alert.showAndWait();
                 //return true;
             } else if (what == 3) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Информация");
-                alert.setHeaderText("Ошибка входа");
-                alert.setContentText("Неправильный логин или пароль");
+                System.out.println("Неправильный логин или пароль.");
+                AlertPry alert = new AlertPry("Ошибка входа", "Неправильный логин или пароль");
                 alert.showAndWait();
                 //return true;
             }

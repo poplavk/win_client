@@ -1,6 +1,5 @@
 package gui;
 
-
 import aleksey2093.GiveMeSettings;
 import aleksey2093.ListenResultFromServer;
 import com.jfoenix.controls.JFXButton;
@@ -8,16 +7,15 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
 import java.io.IOException;
+
+//класс-контроллер для окна аутентификации
 
 public class LoginFormController {
     @FXML

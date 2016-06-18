@@ -1,0 +1,14 @@
+.label {
+    -fx-font-family: "Roboto Medium";
+	-fx-font-size: 13.0;
+	-fx-font-weight: bold;
+}
+
+.button {
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -fx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-pref-width: 125;
+    -fx-text-fill: WHITE;
+}

@@ -1,7 +1,12 @@
 package aleksey2093;
 
+import gui.AlertPry;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,6 +14,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import com.jfoenix.controls.JFXButton.ButtonType;
 
 
 public class RequestFriendList {
@@ -171,20 +178,13 @@ public class RequestFriendList {
         if (what == 1)
             Platform.runLater(() -> {
                 System.out.println("Неправильный логин или пароль.");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Информация");
-                alert.setHeaderText("Ошибка входа");
-                alert.setContentText("Неправильный логин или пароль");
+                AlertPry alert = new AlertPry("Ошибка входа", "Неправильный логин или пароль");
                 alert.showAndWait();
             });
         else if (what == 2)
             Platform.runLater(() -> {
                 System.out.println("Не удается подключиться к серверву");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Ошибка");
-                alert.setHeaderText("Нет подключения");
-                alert.setContentText("Не удается подключиться к серверу проверьте настройки подключения к сети " +
-                        "Интернет");
+                AlertPry alert = new AlertPry("Нет подключения", "Не удается подключиться к серверу, проверьте настройки подключения к сети Интернет");
                 alert.showAndWait();
             });
     }

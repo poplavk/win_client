@@ -8,13 +8,9 @@ import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
+
+//класс-контроллер для окна настроек
 
 public class SettingsFormController extends SettingsDescriptor {
     @FXML

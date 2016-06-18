@@ -26,7 +26,6 @@ import javafx.stage.Stage;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+//класс-контроллер для основного окна
 
 public class MainFormController {
     @FXML
@@ -146,10 +147,12 @@ public class MainFormController {
         return null;
     }
 
+    //действия по нажатию на пункт меню "Новый поиск"
     public void handleMenuItemNewFind(ActionEvent actionEvent) {
 
     }
 
+    //действия по нажатию на пункт меню "Настройки"
     public void handleMenuItemSettings(ActionEvent actionEvent) {
         Stage stage = new Stage();
         Parent root = null;
@@ -167,6 +170,7 @@ public class MainFormController {
         stage.show();
     }
 
+    //действия по нажатию на пункт меню "Выход"
     public void handleMenuItemExit(ActionEvent actionEvent) {
         new ListenResultFromServer().stopListenThread();
         Stage stage = (Stage) menuBarMain.getScene().getWindow();

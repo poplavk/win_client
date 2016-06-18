@@ -3,6 +3,7 @@ package aleksey2093;
 import encrypt.AES;
 import encrypt.MD5;
 import encrypt.RSA;
+import gui.AlertPry;
 import gui.ResultsFormController;
 import hackIntoSN.GetSomePrivateData;
 import hackIntoSN.PersonInfo;
@@ -12,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
@@ -246,24 +248,20 @@ public class GetFriendsLastResult {
      */
     private void showDialogInform(final int what, final String friend) {
         Platform.runLater(() -> {
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Информация");
             if (what == 1) {
                 System.out.println("Неправильный логин или пароль.");
-                alert.setHeaderText("Ошибка входа");
-                alert.setContentText("Неправильный логин или пароль.");
+                AlertPry alert = new AlertPry("Ошибка входа", "Неправильный логин или пароль");
+                alert.showAndWait();
             } else if (what == 2) {
                 System.out.println("Последний результат " + friend + "пуст.");
-                alert.setHeaderText("Пустой результат");
-                alert.setContentText("Результат " + friend + " оказался пуст.");
+                AlertPry alert = new AlertPry("Пустой результат", new String("Результат " + friend + " оказался пуст."));
+                alert.showAndWait();
             } else if (what == 3) {
                 System.out.println("Ошибка при подключении к серверу. Метод загрузки последнего результата.");
-                alert.setHeaderText("Ошибка подключения");
-                alert.setContentText("Ошибка при подключении к серверу. Проверьте свое подключение к интернету и " +
-                        "повторите попытку.");
+                AlertPry alert = new AlertPry("Ошибка подключения", new String("Ошибка при подключении к серверу. " +
+                        "Проверьте свое подключение к интернету и повторите попытку."));
+                alert.showAndWait();
             }
-            alert.showAndWait();
         });
     }
 }

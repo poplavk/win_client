@@ -1,7 +1,5 @@
 package gui;
 
-
-
 import com.jfoenix.controls.JFXButton;
 import hackIntoSN.PersonInfo;
 import javafx.event.ActionEvent;
@@ -12,14 +10,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.application.HostServices;
-
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+//класс-контроллер для окна с результатами
 
 public class ResultsFormController {
 
@@ -37,7 +34,7 @@ public class ResultsFormController {
     public void initialize() {
         //getScrollPaneResult();
     }
-
+//    метод для отображения результатов
     public ScrollPane getScrollPaneResult() throws URISyntaxException {
         if (personInfoArrayList != null && personInfoArrayList.size() > 0) {
             System.out.println("Загрузка всего");
@@ -62,6 +59,7 @@ public class ResultsFormController {
                 }
                 if ((personInfoArrayList.get(i).birthday != null) && (!personInfoArrayList.get(i).birthday.equals(""))) {
                     gridPane.add(new Label("Дата рождения:"), 1, row);
+                    //*************
                     gridPane.add(new Label(personInfoArrayList.get(i).birthday), 2, row);
                     row++;
                     sum_rows++;
