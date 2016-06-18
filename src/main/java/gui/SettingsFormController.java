@@ -69,30 +69,8 @@ public class SettingsFormController extends SettingsDescriptor {
     }
 
     public void getAllSettings() {
-        switch (settingsDescriptor.getSocialNetwork()) {
-//            case 0:
-//                checkBoxVK.setSelected(false);
-//                checkBoxFB.setSelected(false);
-//                break;
-//            case 1:
-//                checkBoxVK.setSelected(true);
-//                checkBoxFB.setSelected(false);
-//                break;
-//            case 2:
-//                checkBoxVK.setSelected(false);
-//                checkBoxFB.setSelected(true);
-//                break;
-//            case 3:
-//                checkBoxVK.setSelected(true);
-//                checkBoxFB.setSelected(true);
-//                break;
-            case 0:
-                radioButtonVK.setSelected(true);
-                break;
-            case 1:
-                radioButtonFB.setSelected(true);
-                break;
-        }
+        radioButtonVK.setSelected(settingsDescriptor.getSocialNetwork());
+        radioButtonFB.setSelected(!settingsDescriptor.getSocialNetwork());
         checkBoxPhoto.setSelected(settingsDescriptor.getPhoto());
         checkBoxName.setSelected(settingsDescriptor.getFio());
         checkBoxBirthday.setSelected(settingsDescriptor.getBithDay());
@@ -108,22 +86,20 @@ public class SettingsFormController extends SettingsDescriptor {
     }
 
     public void handleSaveSettings(ActionEvent actionEvent) {
-        Thread thread = new Thread(new Runnable() {
-            public void run() {
-                new GiveMeSettings().setSaveSettingWindow(new boolean[]{
+        Thread thread = new Thread(() -> {
+            new GiveMeSettings().setSaveSettingWindow(new boolean[]{
 //                        checkBoxVK.isSelected(),
 //                        checkBoxFB.isSelected(),
-                        radioButtonVK.isSelected(),
+                    radioButtonVK.isSelected(),
 //                        radioButtonFB.isSelected(),
-                        checkBoxPhoto.isSelected(),
-                        checkBoxName.isSelected(),
-                        checkBoxBirthday.isSelected(),
-                        checkBoxCity.isSelected(),
-                        checkBoxJob.isSelected(),
-                        checkBoxPhone.isSelected(),
-                        }, choiceBoxEncryptType.getValue().toString()
-                );
-            }
+                    checkBoxPhoto.isSelected(),
+                    checkBoxName.isSelected(),
+                    checkBoxBirthday.isSelected(),
+                    checkBoxCity.isSelected(),
+                    checkBoxJob.isSelected(),
+                    checkBoxPhone.isSelected(),
+                    }, choiceBoxEncryptType.getValue().toString()
+            );
         });
         thread.setName("Сохранение настроек");
         thread.start();
