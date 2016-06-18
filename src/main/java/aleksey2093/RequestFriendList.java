@@ -11,9 +11,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 
-public class FriendSendResult {
+public class RequestFriendList {
 
-    private ArrayList<String> listfrends = new ArrayList<String>();
+    private ArrayList<String> listfrends = new ArrayList<>();
 
 
     public ArrayList getListFriends() {
@@ -33,7 +33,6 @@ public class FriendSendResult {
         try {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-
             if (sendMsgToServer(giveMeSettings, outputStream))
                 if (readMsgFromServer(giveMeSettings, inputStream))
                     return true;
@@ -57,10 +56,10 @@ public class FriendSendResult {
                 showDialogInformation();
                 return false;
             } else if (msg[1] != (byte) 1) {
-                System.out.println("Получили неправильный ответ с сервера. Тип: " + msg[1]);
+                System.out.println("Получили неправильный ответ с сервера в ответ на запрос подписок. Тип: " + msg[1]);
                 return false;
             }
-            System.out.println("Получен ответ. Начинается обработка данных.");
+            System.out.println("Получен ответ на запрос подписок. Начинается обработка данных.");
             if (!formationListFriends(msg, len))
                 return false;
         } catch (IOException e) {
@@ -73,7 +72,7 @@ public class FriendSendResult {
     private boolean formationListFriends(byte[] msg, int len) {
         int j = 2;
         if (len <= j) {
-            System.out.println("Подписчиков нет");
+            System.out.println("Метод подписок: Подписчиков нет");
             return false;
         }
         ArrayList<String> stringArrayList = new ArrayList<String>();
@@ -89,7 +88,7 @@ public class FriendSendResult {
                 String tess = new String(msg, j, lenlogin, "UTF-8");
                 stringArrayList.add(tess);
             } catch (UnsupportedEncodingException e) {
-                System.out.println("Ошибка обработки имени подписчика");
+                System.out.println("Ошибка обработки имени подписчика в методе загрузки подписок");
                 e.printStackTrace();
             }
             j += lenlogin;
@@ -128,7 +127,7 @@ public class FriendSendResult {
             ex.printStackTrace();
             return false;
         }
-        System.out.println("Отправлено");
+        System.out.println("Отправлен запрос на получение подписок");
         return true;
     }
 
@@ -138,30 +137,28 @@ public class FriendSendResult {
             try {
                 return new Socket(giveMeSettings.getServerName(2), giveMeSettings.getServerPort(2));
             } catch (Exception ex) {
-                    err++;
-                    if (err > 9)
-                        return null;
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                System.err.println("Ошибка подключения " + ex.getMessage() + "\n" + ex.toString());
+                err++;
+                if (err > 9)
+                    return null;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.err.println("Ошибка подключения в методе загрузки подписок: " + ex.toString());
             }
         }
     }
 
     private void showDialogInformation()
     {
-        Platform.runLater(new Runnable() {
-            public void run() {
-                System.out.println("Неправильный логин или пароль.");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Информация");
-                alert.setHeaderText("Ошибка входа");
-                alert.setContentText("Неправильный логин или пароль");
-                alert.showAndWait();
-            }
+        Platform.runLater(() -> {
+            System.out.println("Неправильный логин или пароль.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Информация");
+            alert.setHeaderText("Ошибка входа");
+            alert.setContentText("Неправильный логин или пароль");
+            alert.showAndWait();
         });
     }
 }
