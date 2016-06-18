@@ -1,8 +1,8 @@
 package gui;
 
-import aleksey2093.FriendSendResult;
 import aleksey2093.GetFriendsLastResult;
 import aleksey2093.ListenResultFromServer;
+import aleksey2093.RequestFriendList;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
 import delov.MyImage;
@@ -86,22 +86,22 @@ public class MainFormController {
 //            SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor("Подписка  " + i);
 //            gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
 //        }
-        FriendSendResult friendSendResult = new FriendSendResult();
-        ArrayList<String> list = friendSendResult.getListFriends();
-        for (int i = 0; i < list.size(); i++) {
-            SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));
-            gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
-            //Точка возле подписки, для редактированию пользователю недоступна
-            RadioButton radioButton = new RadioButton();
-            radioButton.setDisable(true);
-            radioButton.setSelected(true);
-            radioButton.getStyleClass().add("radio-button-new-data");
-            gridPane.add(radioButton, 1, i);
-        }
-        Platform.runLater(new Runnable() { //обновит панель из главного потока
-            public void run() {
-                scrollPaneSubscription.setContent(gridPane);
+        RequestFriendList requestFriendList = new RequestFriendList();
+        ArrayList<String> list = requestFriendList.getListFriends();
+        Platform.runLater(() -> {
+            for (int i = 0; i < list.size(); i++)
+
+            {
+                SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));
+                gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
+                //Точка возле подписки, для редактированию пользователю недоступна
+                RadioButton radioButton = new RadioButton();
+                radioButton.setDisable(true);
+                radioButton.setSelected(true);
+                radioButton.getStyleClass().add("radio-button-new-data");
+                gridPane.add(radioButton, 1, i);
             }
+            scrollPaneSubscription.setContent(gridPane);
         });
         return scrollPaneSubscription;
     }
@@ -114,14 +114,14 @@ public class MainFormController {
         buttonSubscription.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent a) {
                 GetFriendsLastResult getFriendsLastResult = new GetFriendsLastResult();
-                getFriendsLastResult.GetLastResultThread(buttonSubscription.getText());
+                getFriendsLastResult.getLastResultThread(buttonSubscription.getText());
                 //Сброс зеленой точки по нажаию на подписку
                 Button pushedButton = (Button) a.getTarget();
                 int row = GridPane.getRowIndex(pushedButton);
                 int col = GridPane.getColumnIndex(pushedButton) + 1;
                 RadioButton radioButton = getNodeFromGridPane(col, row);
                 radioButton.setSelected(false);
-            };
+            }
         });
         return buttonSubscription;
     }
