@@ -78,7 +78,7 @@ public class GetSomePrivateData {
      */    public ArrayList<PersonInfo> vkGet(ArrayList<String> links)
     {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
-        boolean[] setts = giveMeSettings.getSocialStg();
+        boolean[] setts = giveMeSettings.getSocialSettings();
         if (setts.length == 1 && !setts[0])
             return null;
         String urlParameters = null;
