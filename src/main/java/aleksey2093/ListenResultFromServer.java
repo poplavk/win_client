@@ -94,7 +94,6 @@ public class ListenResultFromServer {
      * @param giveMeSettings указатель на класс настроек
      * @return сокет
      */
-    /*получение нового сокета для входящих соединенний*/
     private ServerSocket getServerSocket(GiveMeSettings giveMeSettings) {
         int err = 0;
         while (true) {
