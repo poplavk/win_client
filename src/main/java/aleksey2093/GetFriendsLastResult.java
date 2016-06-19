@@ -129,11 +129,22 @@ public class GetFriendsLastResult {
      */
     private void waitServerMsg(GiveMeSettings giveMeSettings, DataInputStream inputStream, String friend) {
         byte[] msg = new byte[1];
-        int len = 0;
+        int len = 0, err = 0;
         while (len <= 0) {
             try {
                 msg = new byte[inputStream.available()];
                 len = inputStream.read(msg);
+                if (err > 10)
+                {
+                    showDialogInform(3,null);
+                    return;
+                } else
+                    try {
+                        err++;
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -254,12 +265,12 @@ public class GetFriendsLastResult {
                 alert.showAndWait();
             } else if (what == 2) {
                 System.out.println("Последний результат " + friend + "пуст.");
-                AlertPry alert = new AlertPry("Пустой результат", new String("Результат " + friend + " оказался пуст."));
+                AlertPry alert = new AlertPry("Пустой результат", "Результат " + friend + " оказался пуст.");
                 alert.showAndWait();
             } else if (what == 3) {
                 System.out.println("Ошибка при подключении к серверу. Метод загрузки последнего результата.");
-                AlertPry alert = new AlertPry("Ошибка подключения", new String("Ошибка при подключении к серверу. " +
-                        "Проверьте свое подключение к интернету и повторите попытку."));
+                AlertPry alert = new AlertPry("Ошибка подключения", "Ошибка при подключении к серверу. " +
+                        "Проверьте свое подключение к интернету и повторите попытку.");
                 alert.showAndWait();
             }
         });
