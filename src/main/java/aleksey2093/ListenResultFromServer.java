@@ -65,12 +65,15 @@ public class ListenResultFromServer {
      */
     public void stopListenThread() {
         try {
-            serverSocket.close();
+            if (serverSocket != null)
+                serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        thread.interrupt();
-        thread.stop();
+        if (thread != null) {
+            thread.interrupt();
+            thread.stop();
+        }
     }
 
     private static ServerSocket serverSocket;
