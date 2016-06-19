@@ -66,18 +66,14 @@ public class MainFormController {
 
 
     public void initialize() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             public void run() {
                 getScrollPaneResult();
             }
-        }).start();
-        new ListenResultFromServer().startListenThread(this);
-//        this.capture = new VideoCapture(0);
+        });
+        thread.setName("Загрузка подписок");
+        thread.start();
     }
-
-//    public void stop() {
-//        new ListenResultFromServer().stopListenThread();
-//    }
 
     public  MainFormController() {
         image = new MyImage();
@@ -92,21 +88,24 @@ public class MainFormController {
 //        }
         RequestFriendList requestFriendList = new RequestFriendList();
         ArrayList<String> list = requestFriendList.getListFriends();
+        if (requestFriendList.isErrAuth() || requestFriendList.isErrSocket())
+            return scrollPaneSubscription;
         Platform.runLater(() -> {
-            for (int i = 0; i < list.size(); i++)
+                for (int i = 0; i < list.size(); i++)
 
-            {
-                SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));
-                gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
-                //Точка возле подписки, для редактированию пользователю недоступна
-                RadioButton radioButton = new RadioButton();
-                radioButton.setDisable(true);
-                radioButton.setSelected(true);
-                radioButton.getStyleClass().add("radio-button-new-data");
-                gridPane.add(radioButton, 1, i);
-            }
-            scrollPaneSubscription.setContent(gridPane);
-        });
+                {
+                    SubscriptionDescriptor subscriptionDescriptor = new SubscriptionDescriptor(list.get(i));
+                    gridPane.add(takeSubscriptionButton(subscriptionDescriptor), 0, i);
+                    //Точка возле подписки, для редактированию пользователю недоступна
+                    RadioButton radioButton = new RadioButton();
+                    radioButton.setDisable(true);
+                    radioButton.setSelected(true);
+                    radioButton.getStyleClass().add("radio-button-new-data");
+                    gridPane.add(radioButton, 1, i);
+                }
+                scrollPaneSubscription.setContent(gridPane);
+            });
+        new ListenResultFromServer().startListenThread(this);
         return scrollPaneSubscription;
     }
 

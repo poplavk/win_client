@@ -30,8 +30,10 @@ public class RequestFriendList {
     private boolean downloadListFriends() {
         GiveMeSettings giveMeSettings = new GiveMeSettings();
         Socket socket = getSocket(giveMeSettings);
-        if (socket == null)
+        if (socket == null) {
+            errSocket = true;
             return false;
+        }
         try {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
@@ -44,6 +46,12 @@ public class RequestFriendList {
             return false;
         }
     }
+
+    private boolean errAuth = false;
+    private boolean errSocket = false;
+
+    public boolean isErrAuth() { return errAuth; }
+    public boolean isErrSocket() { return errSocket; }
 
     private boolean readMsgFromServer(GiveMeSettings giveMeSettings, DataInputStream inputStream) {
         int len = 0;
@@ -58,7 +66,8 @@ public class RequestFriendList {
             if (msg[0] == (byte)-1) {
                 return false;
             } else if (msg[1] == (byte) 101) {
-                showDialogInformation();
+                errAuth = true;
+                showDialogInformation(1);
                 return false;
             } else if (msg[1] != (byte) 1) {
                 System.out.println("Получили неправильный ответ с сервера в ответ на запрос подписок. Тип: " + msg[1]);
@@ -144,10 +153,12 @@ public class RequestFriendList {
                 return new Socket(giveMeSettings.getServerName(2), giveMeSettings.getServerPort(2));
             } catch (Exception ex) {
                 err++;
-                if (err > 9)
+                if (err > 9) {
+                    showDialogInformation(2);
                     return null;
+                }
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -156,15 +167,25 @@ public class RequestFriendList {
         }
     }
 
-    private void showDialogInformation()
-    {
-        Platform.runLater(() -> {
-            System.out.println("Неправильный логин или пароль.");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Информация");
-            alert.setHeaderText("Ошибка входа");
-            alert.setContentText("Неправильный логин или пароль");
-            alert.showAndWait();
-        });
+    private void showDialogInformation(int what) {
+        if (what == 1)
+            Platform.runLater(() -> {
+                System.out.println("Неправильный логин или пароль.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Информация");
+                alert.setHeaderText("Ошибка входа");
+                alert.setContentText("Неправильный логин или пароль");
+                alert.showAndWait();
+            });
+        else if (what == 2)
+            Platform.runLater(() -> {
+                System.out.println("Не удается подключиться к серверву");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Ошибка");
+                alert.setHeaderText("Нет подключения");
+                alert.setContentText("Не удается подключиться к серверу проверьте настройки подключения к сети " +
+                        "Интернет");
+                alert.showAndWait();
+            });
     }
 }

@@ -45,6 +45,7 @@ public class ListenResultFromServer {
         thread = new Thread(() -> {
             int err = 0;
             while (true) {
+                System.out.println("Запущен класс прослушки");
                 listenServer();
                 try {
                     Thread.sleep(1000);
@@ -85,6 +86,7 @@ public class ListenResultFromServer {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
+                System.out.println("Прослушка получила новое подключение");
                 startSocketNewAccept(giveMeSettings, socket);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -144,11 +146,15 @@ public class ListenResultFromServer {
             while (len == 0) { //запускаем прослушку
                 msg = new byte[inputStream.available()];
                 len = inputStream.read(msg);
-                err++;
-                if (err > 100000)
+                if (err > 30) {
+                    System.out.println("Прослушка исчерпан лимит тайм-аута получения сообщения");
                     return;
-                Thread.sleep(500);
+                }
+                else
+                    err++;
+                Thread.sleep(1000);
             }
+            System.out.println("Прослушка получила входящее сообщение");
             msgPostsProcessing(giveMeSettings, msg, len);
         } catch (Exception ex) {
             System.out.println("Ошибка в классе прослушки в методке startSocketNewAccept: " + ex.toString());
