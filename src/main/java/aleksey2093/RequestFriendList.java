@@ -8,10 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -61,12 +58,24 @@ public class RequestFriendList {
     public boolean isErrSocket() { return errSocket; }
 
     private boolean readMsgFromServer(GiveMeSettings giveMeSettings, DataInputStream inputStream) {
-        int len = 0;
+        int len = 0, err = 0;
         byte[] msg = new byte[1];
         try {
             while (len == 0) {
                 msg = new byte[inputStream.available()];
                 len = inputStream.read(msg);
+                if (err > 10)
+                {
+                    showDialogInformation(3);
+                    errSocket = true;
+                    return false;
+                } else
+                try {
+                    err++;
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             //дешифруем
             msg = giveMeSettings.getDecryptMsg(msg);
@@ -178,13 +187,19 @@ public class RequestFriendList {
         if (what == 1)
             Platform.runLater(() -> {
                 System.out.println("Неправильный логин или пароль.");
-                AlertPry alert = new AlertPry("Ошибка входа", "Неправильный логин или пароль");
+                AlertPry alert = new AlertPry("Ошибка входа", "Неправильный логин или пароль.");
                 alert.showAndWait();
             });
         else if (what == 2)
             Platform.runLater(() -> {
                 System.out.println("Не удается подключиться к серверву");
-                AlertPry alert = new AlertPry("Нет подключения", "Не удается подключиться к серверу, проверьте настройки подключения к сети Интернет");
+                AlertPry alert = new AlertPry("Нет подключения", "Не удается подключиться к серверу, проверьте настройки подключения к сети Интернет.");
+                alert.showAndWait();
+            });
+        else if (what == 3)
+            Platform.runLater(() -> {
+                System.out.println("Сервер не отвечает");
+                AlertPry alert = new AlertPry("Нет ответа", "Сервер не отвечает на запросы. Попробуйте перезапустить приложение.");
                 alert.showAndWait();
             });
     }
