@@ -17,6 +17,7 @@ public class GiveMeSettings {
 
     /**
      * Загружает параметры из файла настроек
+     *
      * @return параметры файла настроек
      */
     private Properties loadSettingFile() {
@@ -35,6 +36,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает значения фильтров качества и количества
+     *
      * @return массив из двух переменных
      */
     public int[] getFilter() {
@@ -48,6 +50,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает имя сервера
+     *
      * @param what 1 - эталон, 2 - подписки, 3 - прослушка
      * @return имя Сервера
      */
@@ -66,6 +69,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает номер порта сервера
+     *
      * @param what 1 - эталон, 2 - подписки, 3 - прослушка
      * @return порт
      */
@@ -85,6 +89,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает массив настроек социальных сетей
+     *
      * @return массив настроек
      */
     public boolean[] getSocialSettings() {
@@ -107,7 +112,8 @@ public class GiveMeSettings {
 
     /**
      * Сохранение пользовательских настроек
-     * @param tmp массив настроек соц. сетей
+     *
+     * @param tmp  массив настроек соц. сетей
      * @param encr Тип шифрования
      * @return успешность выполнения операции сохранения
      */
@@ -125,12 +131,12 @@ public class GiveMeSettings {
                 properties.setProperty("encryption", "3");
                 break;
         }
-        properties.setProperty("social.photo", (tmp[1]+""));
-        properties.setProperty("social.fio", (tmp[2]+""));
-        properties.setProperty("social.datebith", (tmp[3]+""));
-        properties.setProperty("social.city", (tmp[4]+""));
-        properties.setProperty("social.work", (tmp[5]+""));
-        properties.setProperty("social.phone", (tmp[6]+""));
+        properties.setProperty("social.photo", (tmp[1] + ""));
+        properties.setProperty("social.fio", (tmp[2] + ""));
+        properties.setProperty("social.datebith", (tmp[3] + ""));
+        properties.setProperty("social.city", (tmp[4] + ""));
+        properties.setProperty("social.work", (tmp[5] + ""));
+        properties.setProperty("social.phone", (tmp[6] + ""));
         try {
             properties.store(new FileOutputStream("src/main/resources/settingfile.properties"), null);
             return true;
@@ -142,6 +148,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает логин пользователя или пароль
+     *
      * @param b логин (true), пароль (false)
      * @return логин/пароль
      */
@@ -155,7 +162,8 @@ public class GiveMeSettings {
 
     /**
      * Сохраняет логин пользователя или пароль
-     * @param b логин (true), пароль (false)
+     *
+     * @param b      логин (true), пароль (false)
      * @param string Сохраняемое значение
      */
     public void setLpkString(boolean b, String string) {
@@ -174,6 +182,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает логин пользователя или пароль в виде массива байт
+     *
      * @param bit логин (true), пароль (false)
      * @return массив байт
      */
@@ -194,6 +203,7 @@ public class GiveMeSettings {
 
     /**
      * Возвращает тип шифрования
+     *
      * @return тип шифрования
      */
     public byte getEncryption() {
@@ -206,6 +216,7 @@ public class GiveMeSettings {
 
     /**
      * Шифрование стандратного сообщения
+     *
      * @param msg массив байт сообщения
      * @return зашифрованный массив
      */
@@ -235,16 +246,16 @@ public class GiveMeSettings {
         } catch (Exception ex) {
             return new byte[] { -1 };
         }*/
-        return  msg;
+        return msg;
     }
 
     /**
      * Дешифрование стандратного сообщения
+     *
      * @param msg массив байт сообщения
      * @return расщифрованный массив
      */
-    public byte[] getDecryptMsg(byte[] msg)
-    {
+    public byte[] getDecryptMsg(byte[] msg) {
         /*try {
             byte bit = msg[0];
             byte[] tmp = new byte[msg.length-1];

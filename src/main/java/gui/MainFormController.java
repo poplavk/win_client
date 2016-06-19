@@ -66,17 +66,14 @@ public class MainFormController {
 
 
     public void initialize() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             public void run() {
                 getScrollPaneResult();
             }
-        }).start();
-//        this.capture = new VideoCapture(0);
+        });
+        thread.setName("Загрузка подписок");
+        thread.start();
     }
-
-//    public void stop() {
-//        new ListenResultFromServer().stopListenThread();
-//    }
 
     public  MainFormController() {
         image = new MyImage();

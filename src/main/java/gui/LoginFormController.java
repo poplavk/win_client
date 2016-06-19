@@ -2,17 +2,20 @@ package gui;
 
 
 import aleksey2093.GiveMeSettings;
+import aleksey2093.ListenResultFromServer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -62,15 +65,17 @@ public class LoginFormController {
     public void handleButtonLogin(ActionEvent actionEvent) {
         if ((textFieldLogin.getText().length() != 0) && (passwordField.getText().length() != 0)) {
             GiveMeSettings settings = new GiveMeSettings();
-            settings.setLpkString(true,textFieldLogin.getText());
-            settings.setLpkString(false,passwordField.getText());
+            settings.setLpkString(true, textFieldLogin.getText());
+            settings.setLpkString(false, passwordField.getText());
 
             Stage s = (Stage) buttonLogin.getScene().getWindow();
             s.close();
             Stage stage = new Stage();
             Parent root = null;
+            FXMLLoader fxmlLoader;
             try {
-                root = FXMLLoader.load(getClass().getClassLoader().getResource("mainForm.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("mainForm.fxml"));
+                root = fxmlLoader.load();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,6 +83,7 @@ public class LoginFormController {
             stage.setTitle("Pry 1.0");
             stage.setScene(scene);
             stage.getIcons().add(new Image("icon.png"));
+            stage.setOnCloseRequest(event -> new ListenResultFromServer().stopListenThread());
             stage.show();
         }
         else {
