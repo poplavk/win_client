@@ -56,12 +56,13 @@ public class MainFormController {
     @FXML
     private JFXButton MakeF;
 
+    // комплекснозначная матрица изображения
     private Mat tmp;
-    // a timer for acquiring the video stream
+    // таймер для получения видеопотока
     private ScheduledExecutorService timer;
-    // the OpenCV object that performs the video capture
+    // объект OpenCV, который выполняет захват видео
     private VideoCapture capture;
-    // a flag to change the button behavior
+    // флаг, изменения поведения кнопки
     private boolean cameraActive;
 
 
@@ -183,27 +184,20 @@ public class MainFormController {
     }
 
     /**
-     * The action triggered by pushing the button on the GUI
+     * Метод, который запускает/останавливает видеопоток
+     * и оставляет на экране последний видеокадр
      */
-    public void makeFoto(ActionEvent actionEvent) {
+    public void makeFoto() {
         this.capture = new VideoCapture(0);
-        // set a fixed width for the frame
         image.setFitWidth(400);
-        // preserve image ratio
         image.setPreserveRatio(true);
 
         if (!this.cameraActive)
         {
-            // start the video capture
             this.capture.open(0);
-            //sleep(1000);
-
-            // is the video stream available?
             if (this.capture.isOpened())
             {
                 this.cameraActive = true;
-
-                // grab a frame every 33 ms (30 frames/sec)
                 Runnable frameGrabber = new Runnable() {
 
                     public void run()
@@ -216,23 +210,18 @@ public class MainFormController {
                 this.timer = Executors.newSingleThreadScheduledExecutor();
                 this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
 
-                // update the button content
                 this.MakeF.setText("Сделать снимок");
             }
             else
             {
-                // log the error
                 System.err.println("Failed to open the camera connection...");
             }
         }
         else
         {
-            // the camera is not active at this point
             this.cameraActive = false;
-            // update again the button content
             this.MakeF.setText("Сделать фото");
 
-            // stop the timer
             try
             {
                 this.timer.shutdown();
@@ -240,18 +229,18 @@ public class MainFormController {
             }
             catch (InterruptedException e)
             {
-                // log the exception
                 System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
             }
 
-            // release the camera
             this.capture.release();
-            // save mat of last frame
             this.tmp = image.getMapTmp();
         }
     }
 
-    public void loadFoto (ActionEvent actionEvent) {
+    /**
+     * Метод, который загружает изображение из галереи
+     */
+    public void loadFoto () {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Открыть файл");
@@ -260,7 +249,7 @@ public class MainFormController {
         if (file != null) {
             tmp = Imgcodecs.imread(file.toURI().getPath().substring(1));
             tmp = image.detectAndDisplay(tmp);
-            image.setImage(image.mat2Image(tmp));//new Image(file.toURI().toString()));
+            image.setImage(image.mat2Image(tmp));
             image.setFitWidth(400);
             image.setPreserveRatio(true);
             image.setSmooth(true);
@@ -268,16 +257,23 @@ public class MainFormController {
         }
     }
 
-    public void originalFoto (ActionEvent actionEvent) {
+    /**
+     * Метод, который возвращает на экран
+     * исходную(необработанную) фотографию
+     */
+    public void originalFoto () {
         image.setNullMapIm();
-        image.setImage(image.mat2Image(tmp));//new Image(file.toURI().toString()));
+        image.setImage(image.mat2Image(tmp));
         image.setFitWidth(400);
         image.setPreserveRatio(true);
         image.setSmooth(true);
         image.setCache(true);
     }
 
-    public void handleMenuSaveImage (ActionEvent actionEvent) {
+    /**
+     * Метод, который сохраняет текущее изображение в галерею
+     */
+    public void handleMenuSaveImage () {
         FileChooser filesave = new FileChooser();
         filesave.setTitle("Сохранить изображение");
         filesave.getExtensionFilters().addAll(
