@@ -227,13 +227,13 @@ public class GiveMeSettings {
             System.arraycopy(msg, 1, tmp, 0, tmp.length);
             int len = "abcabcaabcabcabc".length();
             switch (encrypt_type) {
-                case 1:
+                case 0:
                     msg = new AES("abcabcaabcabcabc").encrypt(tmp);
                     break;
-                case 2:
+                case 1:
                     msg = new RSA().encrypt(tmp);
                     break;
-                case 3:
+                case 2:
                     msg = new MD5().encrypt(tmp);
                     break;
                 default:
@@ -262,13 +262,13 @@ public class GiveMeSettings {
             System.arraycopy(msg, 1, tmp, 0, tmp.length);
             switch (bit)
             {
-                case 1:
+                case 0:
                     msg = new AES("abcabcaabcabcabc").decrypt(tmp);
                     break;
-                case 2:
+                case 1:
                     msg = new RSA().decrypt(tmp);
                     break;
-                case 3:
+                case 2:
                     msg = new MD5().decrypt(tmp);
                     break;
                 default:
