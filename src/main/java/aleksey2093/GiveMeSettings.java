@@ -122,13 +122,13 @@ public class GiveMeSettings {
         properties.setProperty("socialnetwork", (tmp[0] + ""));
         switch (encr) {
             case "AES":
-                properties.setProperty("encryption", "1");
+                properties.setProperty("encryption", "0");
                 break;
             case "RSA":
-                properties.setProperty("encryption", "2");
+                properties.setProperty("encryption", "1");
                 break;
             case "ГОСТ":
-                properties.setProperty("encryption", "3");
+                properties.setProperty("encryption", "2");
                 break;
         }
         properties.setProperty("social.photo", (tmp[1] + ""));
@@ -227,13 +227,13 @@ public class GiveMeSettings {
             System.arraycopy(msg, 1, tmp, 0, tmp.length);
             int len = "abcabcaabcabcabc".length();
             switch (encrypt_type) {
-                case 1:
+                case 0:
                     msg = new AES("abcabcaabcabcabc").encrypt(tmp);
                     break;
-                case 2:
+                case 1:
                     msg = new RSA().encrypt(tmp);
                     break;
-                case 3:
+                case 2:
                     msg = new MD5().encrypt(tmp);
                     break;
                 default:
@@ -262,13 +262,13 @@ public class GiveMeSettings {
             System.arraycopy(msg, 1, tmp, 0, tmp.length);
             switch (bit)
             {
-                case 1:
+                case 0:
                     msg = new AES("abcabcaabcabcabc").decrypt(tmp);
                     break;
-                case 2:
+                case 1:
                     msg = new RSA().decrypt(tmp);
                     break;
-                case 3:
+                case 2:
                     msg = new MD5().decrypt(tmp);
                     break;
                 default:
