@@ -51,13 +51,13 @@ public class SettingsFormController extends SettingsDescriptor {
         choiceBoxEncryptType.setItems(FXCollections.observableArrayList("AES", "RSA", "MD5"));
         switch (settingsDescriptor.getEncryptNow())
         {
-            case 1:
+            case 0:
                 choiceBoxEncryptType.setValue("AES");
                 break;
-            case 2:
+            case 1:
                 choiceBoxEncryptType.setValue("RSA");
                 break;
-            case 3:
+            case 2:
                 choiceBoxEncryptType.setValue("MD5");
                 break;
         }
