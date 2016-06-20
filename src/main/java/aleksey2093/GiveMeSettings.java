@@ -122,13 +122,13 @@ public class GiveMeSettings {
         properties.setProperty("socialnetwork", (tmp[0] + ""));
         switch (encr) {
             case "AES":
-                properties.setProperty("encryption", "1");
+                properties.setProperty("encryption", "0");
                 break;
             case "RSA":
-                properties.setProperty("encryption", "2");
+                properties.setProperty("encryption", "1");
                 break;
             case "ГОСТ":
-                properties.setProperty("encryption", "3");
+                properties.setProperty("encryption", "2");
                 break;
         }
         properties.setProperty("social.photo", (tmp[1] + ""));
